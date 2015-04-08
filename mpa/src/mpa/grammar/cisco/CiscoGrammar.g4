@@ -4,15 +4,14 @@ import
 CiscoGrammarCommonParser, CiscoGrammar_interface, CiscoGrammar_ospf, CiscoGrammar_bgp, CiscoGrammar_acl, CiscoGrammar_routemap;
 
 options {
+   superClass = 'mpa.grammar.MpaParser';
    tokenVocab = CiscoGrammarCommonLexer;
 }
 
 @header {
-//package demo;
+package mpa.grammar.cisco;
 }
 
-@members {
-}
 
 cisco_configuration
 :

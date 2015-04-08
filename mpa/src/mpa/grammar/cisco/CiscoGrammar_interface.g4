@@ -77,7 +77,7 @@ interface_stanza
 :
 //   INTERFACE iname = interface_name MULTIPOINT? NEWLINE interface_stanza_tail
    INTERFACE iname = interface_name  ( MULTIPOINT | MODULE DEC | POINT_TO_POINT )? NEWLINE   
-   { System.out.println("find an interface: "+_localctx.iname.getText()); }
+//   { System.out.println("find an interface: "+_localctx.iname.getText()); }
    interface_stanza_tail
 ;
 

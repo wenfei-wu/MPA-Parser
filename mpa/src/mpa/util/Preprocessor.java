@@ -1,4 +1,4 @@
-package mpa.main;
+package mpa.util;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

@@ -1,11 +1,11 @@
 lexer grammar CiscoGrammarCommonLexer;
 
 options {
-//   superClass = 'batfish.grammar.BatfishLexer';
+   superClass = 'mpa.grammar.MpaLexer';
 }
 
 @header {
-//package demo;
+package mpa.grammar.cisco;
 }
 
 @members {
