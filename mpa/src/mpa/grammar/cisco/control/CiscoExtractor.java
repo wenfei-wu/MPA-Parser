@@ -9,7 +9,7 @@ import mpa.representation.Statistics;
 
 public class CiscoExtractor extends CiscoGrammarBaseListener
          implements MpaExtractor {
-   Statistics stat;
+   Statistics stat = new Statistics();
    @Override
    public Statistics getVendorConfiguration() {
       return stat;
@@ -19,5 +19,6 @@ public class CiscoExtractor extends CiscoGrammarBaseListener
    public void enterInterface_stanza(@NotNull CiscoGrammar.Interface_stanzaContext ctx) { 
       String name = ctx.iname.getText();
       System.out.println("Extractor find a iname "+name);
+      stat.GetIface(name);
    }
 }

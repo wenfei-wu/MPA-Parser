@@ -3,6 +3,7 @@ package mpa.main;
 import mpa.grammar.MpaCombinedParser;
 import mpa.grammar.cisco.control.CiscoCombinedParser;
 import mpa.grammar.cisco.control.CiscoExtractor;
+import mpa.representation.Statistics;
 import mpa.util.Preprocessor;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -28,5 +29,7 @@ public class Driver {
       ParseTreeWalker walker = new ParseTreeWalker();
       walker.walk(extractor, tree);
     //  System.out.println("done");
+      Statistics stat = extractor.getVendorConfiguration();
+      stat.PrintIfaces();
    }
 }
