@@ -1,5 +1,13 @@
 lexer grammar QuantaLexer;
 
+options {
+   superClass = 'mpa.grammar.MpaLexer';
+}
+
+@header {
+package mpa.grammar.quanta;
+}
+
 ANYTHING
 :
 	'description'

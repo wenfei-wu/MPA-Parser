@@ -4,11 +4,13 @@ import
 AristaGrammar_interface, AristaGrammar_acl;
 
 options {
+   superClass = 'mpa.grammar.MpaParser';
    tokenVocab = AristaLexer;
 }
 
+
 @header {
-//package demo;
+package mpa.grammar.arista;
 }
 
 @members {

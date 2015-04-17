@@ -1,5 +1,13 @@
 lexer grammar AristaLexer;
 
+options {
+   superClass = 'mpa.grammar.MpaLexer';
+}
+
+@header {
+package mpa.grammar.arista;
+}
+
 ANYTHING
 :
 	'description'

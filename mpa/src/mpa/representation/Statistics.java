@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Statistics {
    List<String> interfaces = new ArrayList<String>();
+   
    public void GetIface(String iface_name){
       interfaces.add(iface_name);
    }
