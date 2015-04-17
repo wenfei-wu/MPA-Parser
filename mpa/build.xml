@@ -92,6 +92,8 @@
       <delete>
          <fileset dir="src" includes="**/*.tokens"/>
          <fileset dir="src" includes="mpa/grammar/cisco/CiscoGrammar*.java"/>
+         <fileset dir="src" includes="mpa/grammar/arista/Arista*.java"/>
+         <fileset dir="src" includes="mpa/grammar/quanta/Quanta*.java"/>
          <fileset dir="src" includes="mpa/grammar/flatjuniper/FlatJuniperLexer*.java"/>
          <fileset dir="src" includes="mpa/grammar/flatjuniper/FlatJuniperParser*.java"/>
          <fileset dir="src" includes="mpa/grammar/juniper/JuniperGrammar*.java"/>
@@ -139,6 +141,8 @@
      description="Compile antlr4 lexer grammars">
       <parallel>
          <antlr4lexer grammar.name="CiscoGrammarCommonLexer" grammar.packagedir="mpa/grammar/cisco"/>
+         <antlr4lexer grammar.name="AristaLexer" grammar.packagedir="mpa/grammar/arista"/>
+         <antlr4lexer grammar.name="QuantaLexer" grammar.packagedir="mpa/grammar/quanta"/>
        <!--  <antlr4lexer grammar.name="FlatJuniperLexer" grammar.packagedir="mpa/grammar/flatjuniper"/> -->
       </parallel>
    </target>
@@ -158,6 +162,26 @@
                <fileset dir="src/mpa/grammar/cisco" includes="CiscoGrammar_ospf.g4"/>
                <fileset dir="src/mpa/grammar/cisco" includes="CiscoGrammar_rip.g4"/>
                <fileset dir="src/mpa/grammar/cisco" includes="CiscoGrammar_routemap.g4"/>
+            </dependencies>
+         </antlr4parser> 
+         <antlr4parser grammar.name="AristaGrammar" grammar.packagedir="mpa/grammar/arista">
+            <dependencies>
+               <fileset dir="src/mpa/grammar/arista" includes="AristaLexer.g4"/>
+               <fileset dir="src/mpa/grammar/arista" includes="AristaGrammar.g4"/>
+               <fileset dir="src/mpa/grammar/arista" includes="AristaGrammar_acl.g4"/>
+               <fileset dir="src/mpa/grammar/arista" includes="AristaGrammar_interface.g4"/>
+               <fileset dir="src/mpa/grammar/arista" includes="AristaLexer.tokens"/>
+               <fileset dir="src/mpa/grammar/arista" includes="AristaGrammar.tokens"/>
+            </dependencies>
+         </antlr4parser> 
+         <antlr4parser grammar.name="QuantaGrammar" grammar.packagedir="mpa/grammar/quanta">
+            <dependencies>
+               <fileset dir="src/mpa/grammar/quanta" includes="QuantaLexer.g4"/>
+               <fileset dir="src/mpa/grammar/quanta" includes="QuantaGrammar.g4"/>
+               <fileset dir="src/mpa/grammar/quanta" includes="QuantaGrammar_acl.g4"/>
+               <fileset dir="src/mpa/grammar/quanta" includes="QuantaGrammar_interface.g4"/>
+               <fileset dir="src/mpa/grammar/quanta" includes="QuantaLexer.tokens"/>
+               <fileset dir="src/mpa/grammar/quanta" includes="QuantaGrammar.tokens"/>
             </dependencies>
          </antlr4parser> 
          <!--
