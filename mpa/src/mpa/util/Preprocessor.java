@@ -8,6 +8,12 @@ public class Preprocessor {
    public String Process(String vendor, String file) throws IOException{
       if (vendor.equals("Cisco")){
          return CiscoProcess(file);
+      } 
+      else if (vendor.equals("Arista")){
+         return AristaProcess(file);
+      }
+      else if (vendor.equals("Quanta")){
+         return QuantaProcess(file);
       }
       else{
          System.out.println("unknown vendor");
@@ -52,6 +58,68 @@ public class Preprocessor {
             }
          }
       }
+      return out;
+   }
+   public String AristaProcess(String file) throws IOException{
+      boolean inStanza=false;
+      String INTERFACE = "interface";
+      String ACCESS_LIST = "access-list";
+      String out = "";
+      BufferedReader br = new BufferedReader(new FileReader(file));
+      String line = null;
+      while ((line = br.readLine()) != null)
+      {
+       	 if(!line.startsWith(" ")){
+            if(line.startsWith(INTERFACE) || line.startsWith(ACCESS_LIST)){
+               inStanza = true;
+            }
+            else{
+               inStanza = false;
+            }
+         }
+         if (inStanza){
+            out+=line+"\n";
+         }
+         else{
+            if(!line.startsWith(" ")){
+               if(line.contains(ACCESS_LIST)){
+                  out+=line+"\n";
+               }
+            }
+         }
+      }
+      System.out.println(out);
+      return out;
+   }
+ public String QuantaProcess(String file) throws IOException{
+      boolean inStanza=false;
+      String INTERFACE = "interface";
+      String ACCESS_LIST = "access-list";
+      String out = "";
+      BufferedReader br = new BufferedReader(new FileReader(file));
+      String line = null;
+      while ((line = br.readLine()) != null)
+      {
+       	 if(!line.startsWith(" ")){
+            if(line.startsWith(INTERFACE) || line.startsWith(ACCESS_LIST)){
+               inStanza = true;
+            }
+            else{
+               inStanza = false;
+            }
+         }
+         if (inStanza){
+            out+=line+"\n";
+         }
+         else{
+            if(!line.startsWith(" ")){
+               if(line.contains(ACCESS_LIST)){
+                  out+=line+"\n";
+               }
+            }
+         }
+      }
+      System.out.println(out);
       return out;
    }   
 }
