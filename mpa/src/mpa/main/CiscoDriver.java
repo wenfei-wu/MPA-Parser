@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 
 public class CiscoDriver {
-   public static void main(String []args){
+   public void example(){
       //String file=args[0];
       String file = "cisco_test.cfg";
 	   // read files
