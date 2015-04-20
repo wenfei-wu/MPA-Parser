@@ -22,6 +22,7 @@ import mpa.grammar.cisco.control.CiscoExtractor;
 import mpa.grammar.quanta.control.QuantaCombinedParser;
 import mpa.grammar.quanta.control.QuantaExtractor;
 import mpa.representation.Statistics;
+import mpa.util.FileIO;
 import mpa.util.Preprocessor;
 
 public class Mpa {
@@ -32,6 +33,7 @@ public class Mpa {
 	int numThread;
 	String root;
 	Map<String, Statistics> output;
+	String failures;
 	int count;
 	
 	Lock inputLock, outputLock;
@@ -44,6 +46,7 @@ public class Mpa {
 		numThread = nThread;
 		root = source_root;
 		output = new HashMap<String, Statistics>();
+		failures = "";
 		count = 0;
 		inputLock = new ReentrantLock();
 		outputLock = new ReentrantLock();
@@ -65,14 +68,13 @@ public class Mpa {
 	}
 
    private void Process() {
-      // TODO Auto-generated method stub
-
       Thread t[] = new Thread[numThread];
       for(int i = 0; i<numThread; i++){
          t[i] = new Thread(mpaThreads[i], "thread"+i);
       }
       for(int i = 0; i< numThread; i++){
-         t[i].run();
+         t[i].start();
+//         System.out.println("===========");
       }
       for(int i =0; i<numThread; i++){
          try {
@@ -102,6 +104,7 @@ public class Mpa {
          // TODO Auto-generated catch block
          e.printStackTrace();
       }
+  //    System.out.println("Input: read "+files.size()+" files.");
    }
 
    
@@ -119,10 +122,12 @@ public class Mpa {
          localOutput = new HashMap<String, Statistics>();
          localCount = 0;
          localFailure = "";
+    //     System.out.println("MpaThread "+i+" created");
       }
 
       @Override
       public void run() {
+  //       System.out.println("MpaThread "+index+" start");
          while(true){
             // input
             boolean hasData = input();
@@ -136,16 +141,18 @@ public class Mpa {
       }
 
       private void output(boolean last) {
-         localCount+=countInRound;
+        // localCount+=countInRound;
          outputLock.lock();
-         if(last || localCount % PER_THREAD_FILES_PER_REPORT==0){
+         if(last || localCount >= PER_THREAD_FILES_PER_REPORT){
             output.putAll(localOutput);
             count+=localCount;
+            failures += localFailure;
             long endTime = System.nanoTime();    
             long elapsed = (endTime - startTime)/1000000000; // in second
             System.out.println(count+" file processed in "+elapsed+" second, report from thread "+index+", localCount is "+localCount);
-            System.out.println("localFalures: "+localFailure);
+          //  System.out.println("localFalures: "+localFailure);
             // clean for next output
+            System.out.println("localCount is "+localCount+", localOutput size is "+localOutput.size());
             localOutput.clear();
             localCount = 0;
             localFailure = "";
@@ -161,7 +168,7 @@ public class Mpa {
             //System.out.println(localCount);            
             
             String[] fields = line.split(",");
-            if(fields.length!=6){
+            if(fields.length!=7){
                localFailure += line+"\n";
                continue;
             }
@@ -186,38 +193,42 @@ public class Mpa {
          Preprocessor prep = new Preprocessor();
          try {
             content = prep.Process(vendor, file);
-         } catch (IOException e) {
+         } catch (Exception e) {
             e.printStackTrace();
             return null;
          }
          Statistics stat =null;
-         if(vendor.equals("Cisco")){
-            MpaCombinedParser<?,?> parser = new CiscoCombinedParser(content);
-            ParserRuleContext tree = parser.parse();
-            CiscoExtractor extractor = new CiscoExtractor();
-            ParseTreeWalker walker = new ParseTreeWalker();
-            walker.walk(extractor, tree);
-            stat = extractor.getVendorConfiguration();
+         try{
+            if(vendor.equals("Cisco")){
+               MpaCombinedParser<?,?> parser = new CiscoCombinedParser(content);
+               ParserRuleContext tree = parser.parse();
+               CiscoExtractor extractor = new CiscoExtractor();
+               ParseTreeWalker walker = new ParseTreeWalker();
+               walker.walk(extractor, tree);
+               stat = extractor.getVendorConfiguration();
+            }
+            else if(vendor.equals("Arista")){
+               MpaCombinedParser<?,?> parser = new AristaCombinedParser(content);
+               ParserRuleContext tree = parser.parse();
+               AristaExtractor extractor = new AristaExtractor();
+               ParseTreeWalker walker = new ParseTreeWalker();
+               walker.walk(extractor, tree);
+               stat = extractor.getVendorConfiguration();
+            }
+            else if(vendor.equals("Quanta")){
+               MpaCombinedParser<?,?> parser = new QuantaCombinedParser(content);
+               ParserRuleContext tree = parser.parse();
+               QuantaExtractor extractor = new QuantaExtractor();
+               ParseTreeWalker walker = new ParseTreeWalker();
+               walker.walk(extractor, tree);
+               stat = extractor.getVendorConfiguration();
+            }
+            else{
+            //   System.out.println("unknown vendor: "+ vendor);
+            }     
+         }catch(Exception e){
+         //   System.out.println("Parse Error: "+file);
          }
-         else if(vendor.equals("Arista")){
-            MpaCombinedParser<?,?> parser = new AristaCombinedParser(content);
-            ParserRuleContext tree = parser.parse();
-            AristaExtractor extractor = new AristaExtractor();
-            ParseTreeWalker walker = new ParseTreeWalker();
-            walker.walk(extractor, tree);
-            stat = extractor.getVendorConfiguration();
-         }
-         else if(vendor.equals("Quanta")){
-            MpaCombinedParser<?,?> parser = new QuantaCombinedParser(content);
-            ParserRuleContext tree = parser.parse();
-            QuantaExtractor extractor = new QuantaExtractor();
-            ParseTreeWalker walker = new ParseTreeWalker();
-            walker.walk(extractor, tree);
-            stat = extractor.getVendorConfiguration();
-         }
-         else{
-            System.out.println("unknown vendor: "+ vendor);
-         }         
          return stat;
       }
 
@@ -228,12 +239,18 @@ public class Mpa {
             String file = files.remove();
             countInRound++;
             localFiles.add(file);
+            //System.out.println("*");
             if(countInRound>=PER_THREAD_FILES_PER_ROUND) break;
          }
          inputLock.unlock();
+     //    System.out.println("Thread "+index+" read "+countInRound+" files.");
          if(countInRound==0) return false;
          else return true;
-      }
-   
+      }   
+   }
+
+
+   public void WriteFailures(String filename) {
+      FileIO.WriteToFile(failures, filename, false);
    }
 }

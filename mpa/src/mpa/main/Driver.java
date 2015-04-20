@@ -16,6 +16,7 @@ public class Driver {
       // TODO Auto-generated method stub
       Mpa mpa = new Mpa(args[0], args[1], 5);
       mpa.Start();
+      mpa.WriteFailures("failures.csv");
       Map<String, Statistics> stat = mpa.GetStat();
       System.out.println("TODO: output stat");
    }

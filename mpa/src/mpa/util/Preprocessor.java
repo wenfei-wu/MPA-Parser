@@ -16,8 +16,8 @@ public class Preprocessor {
          return QuantaProcess(file);
       }
       else{
-         System.out.println("unknown vendor");
-         assert false;
+      //   System.out.println("unknown vendor");
+      //   assert false;
       }
       return null;
    }
@@ -88,7 +88,7 @@ public class Preprocessor {
             }
          }
       }
-      System.out.println(out);
+  //    System.out.println(out);
       return out;
    }
  public String QuantaProcess(String file) throws IOException{
@@ -119,7 +119,7 @@ public class Preprocessor {
             }
          }
       }
-      System.out.println(out);
+  //    System.out.println(out);
       return out;
    }   
 }

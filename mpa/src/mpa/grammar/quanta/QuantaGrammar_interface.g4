@@ -7,6 +7,6 @@ options {
 if_stanza
 :
     INTERFACE iname = NAME NEWLINE
-	{System.out.println("Interface found: " + _localctx.iname.getText()); }
+//	{System.out.println("Interface found: " + _localctx.iname.getText()); }
 	(ANYTHING ~NEWLINE* NEWLINE)*
 ;
