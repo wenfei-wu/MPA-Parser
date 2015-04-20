@@ -13,14 +13,6 @@ boolean enableIPV6_ADDRESS = true;
 boolean enableIP_ADDRESS = true;
 boolean enableDEC = true;
 
-@Override
-public String printStateVariables() {
-   StringBuilder sb = new StringBuilder();
-   sb.append("enableIPV6_ADDRESS: " + enableIPV6_ADDRESS + "\n");
-   sb.append("enableIP_ADDRESS: " + enableIP_ADDRESS + "\n");
-   sb.append("enableDEC: " + enableDEC + "\n");
-   return sb.toString();
-}
 
 }
 

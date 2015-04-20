@@ -40,6 +40,8 @@ public class Driver {
     // parse it
          parser.cisco_configuration();
       } catch (Exception e) {
+    	  System.out.println("Error !!");
+    //	  e.printStackTrace();
          return ;
       }
    }
@@ -50,6 +52,16 @@ public class Driver {
                Object offendingSymbol, int line, int charPositionInLine,
                String msg, RecognitionException e) {
             throw new IllegalStateException("failed to token at line " + line
+                  + " due to " + msg, e);
+         }
+      });
+
+      parser.addErrorListener(new BaseErrorListener() {
+         @Override
+         public void syntaxError(Recognizer<?, ?> recognizer,
+               Object offendingSymbol, int line, int charPositionInLine,
+               String msg, RecognitionException e) {
+            throw new IllegalStateException("failed to parse at line " + line
                   + " due to " + msg, e);
          }
       });
