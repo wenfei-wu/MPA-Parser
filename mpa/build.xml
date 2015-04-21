@@ -91,13 +91,11 @@
    <target name="grammarclean" description="Delete generated antlr files">
       <delete>
          <fileset dir="src" includes="**/*.tokens"/>
-         <fileset dir="src" includes="mpa/grammar/cisco/CiscoGrammar*.java"/>
+         <fileset dir="src" includes="mpa/grammar/cisco/Cisco*.java"/>
          <fileset dir="src" includes="mpa/grammar/arista/Arista*.java"/>
          <fileset dir="src" includes="mpa/grammar/quanta/Quanta*.java"/>
-         <fileset dir="src" includes="mpa/grammar/flatjuniper/FlatJuniperLexer*.java"/>
-         <fileset dir="src" includes="mpa/grammar/flatjuniper/FlatJuniperParser*.java"/>
-         <fileset dir="src" includes="mpa/grammar/juniper/JuniperGrammar*.java"/>
-         <fileset dir="src" includes="mpa/grammar/juniper/FlatJuniperGrammar*.java"/>
+         <fileset dir="src" includes="mpa/grammar/flatjuniper/FlatJuniper*.java"/>
+         <fileset dir="src" includes="mpa/grammar/juniper/Juniper*.java"/>
       </delete>
    </target>
 
@@ -143,6 +141,8 @@
          <antlr4lexer grammar.name="CiscoGrammarCommonLexer" grammar.packagedir="mpa/grammar/cisco"/>
          <antlr4lexer grammar.name="AristaLexer" grammar.packagedir="mpa/grammar/arista"/>
          <antlr4lexer grammar.name="QuantaLexer" grammar.packagedir="mpa/grammar/quanta"/>
+         <antlr4lexer grammar.name="JuniperLexer" grammar.packagedir="mpa/grammar/juniper"/>
+         <antlr4lexer grammar.name="FlatJuniperLexer" grammar.packagedir="mpa/grammar/flatjuniper"/>
        <!--  <antlr4lexer grammar.name="FlatJuniperLexer" grammar.packagedir="mpa/grammar/flatjuniper"/> -->
       </parallel>
    </target>
@@ -184,12 +184,20 @@
                <fileset dir="src/mpa/grammar/quanta" includes="QuantaGrammar.tokens"/>
             </dependencies>
          </antlr4parser> 
-         <!--
+         <antlr4parser grammar.name="JuniperParser" grammar.packagedir="mpa/grammar/juniper">
+            <dependencies>
+               <fileset dir="src/mpa/grammar/juniper" includes="JuniperLexer.g4"/>
+               <fileset dir="src/mpa/grammar/juniper" includes="JuniperLexer.tokens"/>
+               <fileset dir="src/mpa/grammar/juniper" includes="JuniperParser.g4"/>
+               <fileset dir="src/mpa/grammar/juniper" includes="JuniperParser.tokens"/>
+            </dependencies>
+         </antlr4parser> 
          <antlr4parser grammar.name="FlatJuniperParser" grammar.packagedir="mpa/grammar/flatjuniper">
             <dependencies>
                <fileset dir="src/mpa/grammar/flatjuniper" includes="FlatJuniperParser.g4"/>
                <fileset dir="src/mpa/grammar/flatjuniper" includes="FlatJuniperLexer.g4"/>
                <fileset dir="src/mpa/grammar/flatjuniper" includes="FlatJuniperLexer.tokens"/>
+               <fileset dir="src/mpa/grammar/flatjuniper" includes="FlatJuniperParser.tokens"/>
                <fileset dir="src/mpa/grammar/flatjuniper" includes="FlatJuniper_bgp.g4"/>
                <fileset dir="src/mpa/grammar/flatjuniper" includes="FlatJuniper_common.g4"/>
                <fileset dir="src/mpa/grammar/flatjuniper" includes="FlatJuniper_firewall.g4"/>
@@ -198,10 +206,11 @@
                <fileset dir="src/mpa/grammar/flatjuniper" includes="FlatJuniper_mpls.g4"/>
                <fileset dir="src/mpa/grammar/flatjuniper" includes="FlatJuniper_ospf.g4"/>
                <fileset dir="src/mpa/grammar/flatjuniper" includes="FlatJuniper_policy_options.g4"/>
+               <fileset dir="src/mpa/grammar/flatjuniper" includes="FlatJuniper_protocols.g4"/>
                <fileset dir="src/mpa/grammar/flatjuniper" includes="FlatJuniper_routing_instances.g4"/>
             </dependencies>
          </antlr4parser>
-         -->
+
       </parallel>
    </target>
 
