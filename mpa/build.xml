@@ -140,6 +140,8 @@
       <parallel>
          <antlr4lexer grammar.name="CiscoGrammarCommonLexer" grammar.packagedir="mpa/grammar/cisco"/>
        <!--  <antlr4lexer grammar.name="FlatJuniperLexer" grammar.packagedir="mpa/grammar/flatjuniper"/> -->
+         <antlr4lexer grammar.name="AristaLexer" grammar.packagedir="mpa/grammar/arista"/>
+         <antlr4lexer grammar.name="QuantaLexer" grammar.packagedir="mpa/grammar/quanta"/>
       </parallel>
    </target>
 
@@ -159,7 +161,27 @@
                <fileset dir="src/mpa/grammar/cisco" includes="CiscoGrammar_rip.g4"/>
                <fileset dir="src/mpa/grammar/cisco" includes="CiscoGrammar_routemap.g4"/>
             </dependencies>
-         </antlr4parser> 
+         </antlr4parser>
+         <antlr4parser grammar.name="AristaGrammar" grammar.packagedir="mpa/grammar/arista">
+            <dependencies>
+               <fileset dir="src/mpa/grammar/arista" includes="AristaGrammar.g4"/>
+               <fileset dir="src/mpa/grammar/arista" includes="AristaLexer.g4"/>
+               <fileset dir="src/mpa/grammar/arista" includes="AristaLexer.tokens"/>
+               <fileset dir="src/mpa/grammar/arista" includes="AristaGrammar_acl.g4"/>
+               <fileset dir="src/mpa/grammar/arista" includes="AristaGrammar_bgp.g4"/>               
+               <fileset dir="src/mpa/grammar/arista" includes="AristaGrammar_interface.g4"/>
+               <fileset dir="src/mpa/grammar/arista" includes="AristaGrammar_spanningtree.g4"/>
+            </dependencies>            
+         </antlr4parser>
+         <antlr4parser grammar.name="QuantaGrammar" grammar.packagedir="mpa/grammar/quanta">
+            <dependencies>
+               <fileset dir="src/mpa/grammar/quanta" includes="QuantaGrammar.g4"/>
+               <fileset dir="src/mpa/grammar/quanta" includes="QuantaLexer.g4"/>
+               <fileset dir="src/mpa/grammar/quanta" includes="QuantaLexer.tokens"/>
+               <fileset dir="src/mpa/grammar/quanta" includes="QuantaGrammar_acl.g4"/>
+               <fileset dir="src/mpa/grammar/quanta" includes="QuantaGrammar_interface.g4"/>               
+            </dependencies>
+         </antlr4parser>
          <!--
          <antlr4parser grammar.name="FlatJuniperParser" grammar.packagedir="mpa/grammar/flatjuniper">
             <dependencies>

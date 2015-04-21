@@ -4,11 +4,12 @@ import
 QuantaGrammar_interface, QuantaGrammar_acl;
 
 options {
+   superClass = 'mpa.grammar.MpaParser';
    tokenVocab = QuantaLexer;
 }
 
 @header {
-//package demo;
+package mpa.grammar.quanta;
 }
 
 @members {

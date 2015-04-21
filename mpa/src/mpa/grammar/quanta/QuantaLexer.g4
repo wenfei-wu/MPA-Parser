@@ -1,5 +1,13 @@
 lexer grammar QuantaLexer;
 
+@header {
+package mpa.grammar.quanta;
+}
+
+options {
+superClass = 'mpa.grammar.MpaLexer';
+}
+
 ANYTHING
 :
 	'description'
@@ -15,10 +23,18 @@ ANYTHING
 	| 'no'
 	| 'classofservice'
 	| 'snmp-server'
-	| 'sflow'
-	| 'udld'
-	| 'lacp'
+	| 'sflow'		
 	| [\:] | [-] | [_] | [,] | ["] | ['/'] | [\.]
+;
+
+UDLD
+:
+	'udld'
+;
+
+LACP
+:
+	'lacp'
 ;
 
 INTERFACE
