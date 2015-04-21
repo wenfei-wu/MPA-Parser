@@ -19,6 +19,9 @@ import mpa.grammar.arista.control.AristaCombinedParser;
 import mpa.grammar.arista.control.AristaExtractor;
 import mpa.grammar.cisco.control.CiscoCombinedParser;
 import mpa.grammar.cisco.control.CiscoExtractor;
+import mpa.grammar.flatjuniper.FlatJuniperParser;
+import mpa.grammar.flatjuniper.control.FlatJuniperCombinedParser;
+import mpa.grammar.flatjuniper.control.FlatJuniperExtractor;
 import mpa.grammar.quanta.control.QuantaCombinedParser;
 import mpa.grammar.quanta.control.QuantaExtractor;
 import mpa.representation.Statistics;
@@ -222,6 +225,14 @@ public class Mpa {
                ParseTreeWalker walker = new ParseTreeWalker();
                walker.walk(extractor, tree);
                stat = extractor.getVendorConfiguration();
+            }
+            else if(vendor.equals("Juniper") || vendor.equals("Juniper-Flat")){
+                MpaCombinedParser<?,?> parser = new FlatJuniperCombinedParser(content);
+                ParserRuleContext tree = parser.parse();
+                FlatJuniperExtractor extractor = new FlatJuniperExtractor();
+                ParseTreeWalker walker = new ParseTreeWalker();
+                walker.walk(extractor, tree);
+                stat = extractor.getVendorConfiguration();
             }
             else{
             //   System.out.println("unknown vendor: "+ vendor);

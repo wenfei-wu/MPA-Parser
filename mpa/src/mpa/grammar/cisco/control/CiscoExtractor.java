@@ -21,4 +21,10 @@ public class CiscoExtractor extends CiscoGrammarBaseListener
 //      System.out.println("Extractor find a iname "+name);
       stat.GetIface(name);
    }
+   
+   @Override
+   public void enterMstp_stanza(@NotNull CiscoGrammar.Mstp_stanzaContext ctx) {
+	   stat.hasMSTP = true;
+   }
+   
 }

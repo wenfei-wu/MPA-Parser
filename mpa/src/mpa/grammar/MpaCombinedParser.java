@@ -1,6 +1,6 @@
 package mpa.grammar;
 
-import java.lang.reflect.InvocationTargetException;
+
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -32,8 +32,6 @@ public abstract class MpaCombinedParser<P extends MpaParser, L extends MpaLexer>
                .newInstance(_tokens);
 
          _parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
-      
-         
 
          AddErrorListener(_lexer, _parser);
       } catch (Exception e) {
