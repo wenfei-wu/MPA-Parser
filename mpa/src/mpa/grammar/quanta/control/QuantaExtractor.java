@@ -14,12 +14,27 @@ public class QuantaExtractor extends QuantaGrammarBaseListener
    public Statistics getVendorConfiguration() {
       return stat;
    }
-/*
+   
    @Override 
-   public void enterInterface_stanza(@NotNull QuantaGrammar.Interface_stanzaContext ctx) { 
-      String name = ctx.iname.getText();
-      System.out.println("Extractor find a iname "+name);
-      stat.GetIface(name);
+   public void enterIf_stanza(@NotNull QuantaGrammar.If_stanzaContext ctx) { 
+   	  this.stat.interfaces.add(ctx.iname.getText());  
    }
-*/
+   
+   @Override 
+   public void enterLacp(@NotNull QuantaGrammar.LacpContext ctx) {
+      this.stat.hasLACP = true;
+      this.stat.LACPInst += 1;
+   }
+   
+   @Override 
+   public void enterUdld(@NotNull QuantaGrammar.UdldContext ctx) {
+      this.stat.hasUDLD = true;
+      this.stat.UDLDInst += 1;
+   }
+   
+   @Override 
+   public void enterAcl_stanza(@NotNull QuantaGrammar.Acl_stanzaContext ctx) {
+      this.stat.acls.add(ctx.aclName.getText());
+      
+   }
 }

@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Statistics {
-   List<String> interfaces = new ArrayList<String>();
-   List<String> acls = new ArrayList<String>();
-   List<Reference> references = new ArrayList<Reference>();
+   public List<String> interfaces = new ArrayList<String>();
+   public List<String> acls = new ArrayList<String>();
+   public List<Reference> references = new ArrayList<Reference>();
+   public List<BGPNeighbor> bgpNeighbors = new ArrayList<BGPNeighbor>();
+   
+   public String asNumber;
    
    public boolean hasUDLD;
    public boolean hasMSTP;
