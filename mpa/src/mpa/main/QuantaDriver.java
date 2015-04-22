@@ -12,7 +12,8 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 
 public class QuantaDriver {
-   public void example(){
+
+   public void example() {
       //String file=args[0];
       String file = "quanta_LB4M.cfg";
 	   // read files

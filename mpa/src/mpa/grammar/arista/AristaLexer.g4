@@ -1,12 +1,41 @@
 lexer grammar AristaLexer;
 
-options {
-   superClass = 'mpa.grammar.MpaLexer';
-}
-
 @header {
 package mpa.grammar.arista;
 }
+
+options {
+superClass = 'mpa.grammar.MpaLexer';
+}
+
+SPANNING_TREE
+:
+	'spanning-tree'
+;
+
+MODE
+:
+	'mode'
+;
+
+MSTP
+:
+	'mstp'
+;
+
+ROUTER:
+	'router'
+;
+
+NEIGHBOR
+:
+	'neighbor'
+;
+
+REMOTE_AS
+:
+	'remote-as'
+;
 
 ANYTHING
 :
@@ -22,7 +51,17 @@ ANYTHING
 	|'ip address'
 	|'channel-group'
 	|'vrf'
-	| [\:] | [-] | ['/'] | [\.]
+	|'bgp'
+	|'maximum-paths'
+	|'aggregate-address'
+	|'redistribute'
+	|'address-family'
+	|'network'
+	|'route-map'
+	|'maximum-routes'
+	|'update-source'
+	|'activate'
+	| [\:] | [-] | ['/'] | [\.] | [@] | [!]
 ;
 
 INTERFACE
@@ -47,13 +86,9 @@ NEWLINE
 
 NAME
 :
-   ('-'|[a-zA-Z0-9]|'/')+
+   ('-'|[a-zA-Z0-9]|'/'|[\.]|[\:])+
 ;
 
 WS:
    [ \t]+ -> skip;
-
-
-
-
 

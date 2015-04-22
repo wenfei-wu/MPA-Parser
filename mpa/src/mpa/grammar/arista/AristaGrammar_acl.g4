@@ -7,6 +7,6 @@ options {
 acl_stanza
 :
 	IP ACCESS_LIST aclName = NAME NEWLINE
-	//{System.out.println("ACL found: " + _localctx.aclName.getText()); }
+	{System.out.println("ACL found: " + _localctx.aclName.getText()); }
 	(ANYTHING ~NEWLINE* NEWLINE)*
 ;

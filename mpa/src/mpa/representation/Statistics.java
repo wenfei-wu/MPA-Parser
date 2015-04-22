@@ -6,10 +6,28 @@ import java.util.List;
 import mpa.util.Util;
 
 public class Statistics {
+
    L2Protocols l2protocols;
    L3Protocols l3protocols;
    Vlans vlans;
    References references;
+
+   public List<String> interfaces = new ArrayList<String>();
+   public List<String> acls = new ArrayList<String>();
+   public List<Reference> references = new ArrayList<Reference>();
+   public List<BGPNeighbor> bgpNeighbors = new ArrayList<BGPNeighbor>();
+   
+   public String asNumber;
+   
+   public boolean hasUDLD;
+   public boolean hasMSTP;
+   public boolean hasDHCP;
+   public boolean hasDOT1Q;
+   public boolean hasHSRP;
+   public boolean hasLACP;
+   
+   public boolean hasOSPF;
+   public boolean hasBGP;
    
    public Statistics(){
       l2protocols = new L2Protocols();
