@@ -1,5 +1,8 @@
 package mpa.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 
 public class Util {
@@ -289,5 +292,34 @@ public class Util {
       }
       return product;
    }
+   
+   public static List<Integer> range2Array(String aRange){
+      List<Integer> range_int = new ArrayList<Integer>();
+      String ranges[] = aRange.split(",");
+      for(String range: ranges){
+         if(range.contains("-")){
+            String boundary[] = range.split("-");
+            int start = Integer.parseInt(boundary[0]);
+            int end = Integer.parseInt(boundary[1]);
+            for(int i = start; i<=end; i++){
+               range_int.add(i);
+            }
+         }
+         else{
+            int v = Integer.parseInt(range);
+            range_int.add(v);
+         }
+      }
+      return range_int;
+   }
 
+   public static String Join(String delimiter, String []strs){
+      if(strs==null) return null;
+      if(strs.length == 0) return "";
+      String out = strs[0];
+      for(int i =1; i< strs.length; i++){
+         out+= delimiter+strs[i];
+      }
+      return out;
+   }
 }

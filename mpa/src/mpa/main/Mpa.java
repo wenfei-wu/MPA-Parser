@@ -24,9 +24,11 @@ import mpa.grammar.flatjuniper.control.FlatJuniperCombinedParser;
 import mpa.grammar.flatjuniper.control.FlatJuniperExtractor;
 import mpa.grammar.quanta.control.QuantaCombinedParser;
 import mpa.grammar.quanta.control.QuantaExtractor;
+import mpa.representation.Configs;
 import mpa.representation.Statistics;
 import mpa.util.FileIO;
 import mpa.util.Preprocessor;
+import mpa.util.Util;
 
 public class Mpa {
    private final int PER_THREAD_FILES_PER_ROUND = 10;
@@ -35,7 +37,7 @@ public class Mpa {
 	String fileList;
 	int numThread;
 	String root;
-	Map<String, Statistics> output;
+	Map<String, Statistics> stats;
 	String failures;
 	int count;
 	
@@ -48,7 +50,7 @@ public class Mpa {
 	   fileList = flist;
 		numThread = nThread;
 		root = source_root;
-		output = new HashMap<String, Statistics>();
+		stats = new HashMap<String, Statistics>();
 		failures = "";
 		count = 0;
 		inputLock = new ReentrantLock();
@@ -67,7 +69,7 @@ public class Mpa {
 	}
 	
 	public Map<String, Statistics> GetStat(){
-	   return output;
+	   return stats;
 	}
 
    private void Process() {
@@ -147,7 +149,7 @@ public class Mpa {
         // localCount+=countInRound;
          outputLock.lock();
          if(last || localCount >= PER_THREAD_FILES_PER_REPORT){
-            output.putAll(localOutput);
+            stats.putAll(localOutput);
             count+=localCount;
             failures += localFailure;
             long endTime = System.nanoTime();    
@@ -263,5 +265,19 @@ public class Mpa {
 
    public void WriteFailures(String filename) {
       FileIO.WriteToFile(failures, filename, false);
+   }
+   
+   public void WriteStatistics(String filename){
+      System.out.println("Wrting Statistics:");
+      System.out.println("stamp, device, config, vendor, model, role, architecture");
+      System.out.println("vlanDeclared, vlanInst");
+      System.out.println(Util.Join(", ", Configs.L2Protocols));
+      System.out.println("L3");
+      System.out.println("References");
+      String out="";
+      for(Map.Entry<String, Statistics> entry: stats.entrySet()){
+         out+=entry.getKey()+","+entry.getValue()+"\n";
+      }
+      FileIO.WriteToFile(out, "statistics.csv", false);
    }
 }

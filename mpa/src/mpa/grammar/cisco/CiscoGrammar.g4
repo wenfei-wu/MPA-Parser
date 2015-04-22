@@ -19,10 +19,13 @@ cisco_configuration
       acl_stanza
       | interface_stanza
       | mstp_configuration_stanza
+      | mstp_stanza
       | null_stanza
       | route_map_stanza
       | router_bgp_stanza
       | router_ospf_stanza
+      | udld_stanza
+      | vlan_stanza
    )* NEWLINE* EOF
 ;
 
@@ -67,3 +70,7 @@ udld_stanza
    UDLD AGGRESSIVE NEWLINE
 ;
 
+vlan_stanza
+:
+   VLAN v = DEC NEWLINE
+;

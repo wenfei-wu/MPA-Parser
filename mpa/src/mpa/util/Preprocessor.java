@@ -74,23 +74,34 @@ public class Preprocessor {
    }
    public String CiscoProcess(String file) throws IOException{
       boolean inStanza=false;
+      // interface
       String INTERFACE = "interface";
+      // L3
       String OSPF = "router ospf";
       String BGP = "router bgp";
+      // routemap
       String ROUTE_MAP = "route-map";
-      String MSTP = "spanning-tree mst configuration";
+      // ACL
       String ACCESS_LIST = "access-list";
       String PREFIX_LIST = "prefix-list";
       String COMMUNITY_LIST = "community-list";
+      // VLAN
+      String VLAN = "vlan \\d+";
+      // L2
+      String UDLD = "udld aggressive";
+      String MSTP = "spanning-tree mst configuration";
+      String MST_MODE = "spanning-tree mode mst";
+      
       String out = "";
       BufferedReader br = new BufferedReader(new FileReader(file));  
       String line = null;  
       while ((line = br.readLine()) != null)  
       {
          if(!line.startsWith(" ")){
-            if(line.startsWith(INTERFACE) || line.startsWith(OSPF) ||
-                  line.startsWith(BGP) || line.startsWith(ROUTE_MAP) ||
-                  line.startsWith(MSTP)){
+            if(line.startsWith(INTERFACE) || // interface
+                  line.startsWith(OSPF) || line.startsWith(BGP) || // L3
+                  line.startsWith(ROUTE_MAP) || // routemap
+                  line.startsWith(MSTP) || line.startsWith(MST_MODE) ){  // L2
                inStanza = true;
             }
             else{
@@ -102,13 +113,16 @@ public class Preprocessor {
          }
          else{
             if(!line.startsWith(" ")){
-               if(line.contains(ACCESS_LIST) || line.contains(PREFIX_LIST)
+               if(line.matches(VLAN) // VLAN
+                     || line.contains(ACCESS_LIST)  // ACL 
+                     || line.contains(PREFIX_LIST)
                      || line.contains(COMMUNITY_LIST)){
                   out+=line+"\n";
                }
             }
          }
       }
+      
       return out;
    }
    public String AristaProcess(String file) throws IOException{

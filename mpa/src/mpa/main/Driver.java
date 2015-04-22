@@ -19,6 +19,6 @@ public class Driver {
       mpa.WriteFailures("failures.csv");
       Map<String, Statistics> stat = mpa.GetStat();
       System.out.println("TODO: output stat");
+      mpa.WriteStatistics("statistics.csv");
    }
-
 }

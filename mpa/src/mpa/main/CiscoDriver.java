@@ -30,6 +30,5 @@ public class CiscoDriver {
       walker.walk(extractor, tree);
     //  System.out.println("done");
       Statistics stat = extractor.getVendorConfiguration();
-      stat.PrintIfaces();
    }
 }

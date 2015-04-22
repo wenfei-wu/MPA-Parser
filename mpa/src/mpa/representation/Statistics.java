@@ -3,53 +3,44 @@ package mpa.representation;
 import java.util.ArrayList;
 import java.util.List;
 
+import mpa.util.Util;
+
 public class Statistics {
-   List<String> interfaces = new ArrayList<String>();
-   List<String> acls = new ArrayList<String>();
-   List<Reference> references = new ArrayList<Reference>();
-   
-   public boolean hasUDLD;
-   public boolean hasMSTP;
-   public boolean hasDHCP;
-   public boolean hasDOT1Q;
-   public boolean hasHSRP;
-   public boolean hasLACP;
-   
-   public boolean hasOSPF;
-   public boolean hasBGP;
-   
-   
-   public int UDLDInst;
-   public int MSTPInst;
-   public int DHCPInst;
-   public int DOT1QInst;
-   public int HSRPInst;
-   public int LACPInst;
-   
-   public int OSPFInst;
-   public int BGPInst;
+   L2Protocols l2protocols;
+   L3Protocols l3protocols;
+   Vlans vlans;
+   References references;
    
    public Statistics(){
-	   hasUDLD = false;  UDLDInst = 0;
-	   hasMSTP = false;  MSTPInst = 0;
-	   hasDHCP = false;  DHCPInst = 0;
-	   hasDOT1Q = false; DOT1QInst = 0;
-	   hasHSRP = false;  HSRPInst = 0;
-	   hasLACP = false;  LACPInst = 0;
-	   hasOSPF = false;  OSPFInst = 0;
-	   hasBGP = false;   BGPInst = 0;
+      l2protocols = new L2Protocols();
+      l3protocols = new L3Protocols();
+      vlans = new Vlans();
+      references = new References();
    }
    
-   public void GetIface(String iface_name){
-      interfaces.add(iface_name);
+   
+   // VLAN
+   public void DeclareVlan(String vlan){
+      vlans.DeclareVlan(vlan);
+   }
+   public void IfaceVlan(String iface, String vlan){
+      vlans.IfaceVlan(iface, vlan);
    }
    
-   public void PrintIfaces(){
-      System.out.println("In statistics");
-      for(String i: interfaces){
-         System.out.print(i+" ");
-      }
-      System.out.println();
+   // l2 protocols
+   public void DeclareL2Proto(String proto){
+      l2protocols.DeclareProtocol(proto);
    }
-
+   public void L2ProtoInst(String proto, String info){
+      l2protocols.ProtoInst(proto, info);
+   }
+   
+   // l3 protocols  TODO
+   
+   @Override
+   public String toString(){
+      String fields[] = new String[] {vlans.toString(), l2protocols.toString(), 
+            l3protocols.toString(), references.toString() };
+      return Util.Join(",", fields);
+   }
 }
