@@ -14,6 +14,21 @@ public class L2Protocols {
    Map<String, Integer> protoInst;
    
    // some protocols need special processing
+   // for example:
+   // MSTP
+   //====================================
+   // spanning-tree mst configuration
+   //    name config1
+   //    revision 1
+   //    instance 1 vlan 1-999
+   //    instance 2 vlan 2000-2999
+   //====================================
+   // here there are 2 spanning trees configured. however,
+   // the vlan range is 1-4096, the remaining vlans that are not 
+   // in instance 1 or 2 form the 3rd spanning tree. So there should
+   // be 3 spanning tree instances.
+   // I process them in the function ProcessSpecialProtocols()
+
    List<String> MSTP_instances;
    public L2Protocols(){
       protoInst = new HashMap<String, Integer>();
