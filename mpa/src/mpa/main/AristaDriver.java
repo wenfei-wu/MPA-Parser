@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 
 public class AristaDriver {
-   public static void main(String []args){
+   public void example() {
       //String file=args[0];
       String file = "arista_DCS-7050S-64-F.cfg";
 	   // read files

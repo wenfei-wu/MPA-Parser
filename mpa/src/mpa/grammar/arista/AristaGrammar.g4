@@ -8,6 +8,7 @@ options {
    tokenVocab = AristaLexer;
 }
 
+
 @header {
 package mpa.grammar.arista;
 }

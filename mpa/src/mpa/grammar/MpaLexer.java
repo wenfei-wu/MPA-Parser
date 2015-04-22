@@ -12,7 +12,7 @@ public abstract class MpaLexer extends Lexer {
 
    public MpaLexer(CharStream input) {
       super(input);
-      initErrorListener();
+//      initErrorListener();
    }
    
 
