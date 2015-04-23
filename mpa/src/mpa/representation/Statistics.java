@@ -19,6 +19,15 @@ public class Statistics {
       references = new References();
    }
    
+   // References
+      // intra
+   public void AddRefEntity(String type, String name){
+      references.AddRefEntity(type, name);
+   }
+      // intra ref
+   public void AddIntraRef(String from_t, String from_n, String to_t, String to_n){
+      references.AddIntraReferences(from_t, from_n, to_t, to_n);
+   }
    
    // VLAN
    public void DeclareVlan(String vlan){
