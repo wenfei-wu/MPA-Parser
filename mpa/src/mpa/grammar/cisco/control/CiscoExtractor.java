@@ -7,6 +7,7 @@ import mpa.grammar.cisco.CiscoGrammar;
 import mpa.grammar.cisco.CiscoGrammarBaseListener;
 import mpa.representation.Identifiers;
 import mpa.representation.Statistics;
+import mpa.util.Util;
 
 public class CiscoExtractor extends CiscoGrammarBaseListener
          implements MpaExtractor {
@@ -110,7 +111,7 @@ public class CiscoExtractor extends CiscoGrammarBaseListener
       stat.AddRefEntity(Identifiers.ACCESS_T, ctx.name.getText());
    }
          // route-map
-//   @Override public void enterRoute_map_named_stanza(@NotNull CiscoGrammar.Route_map_named_stanzaContext ctx) { }
+   //@Override public void enterRoute_map_named_stanza(@NotNull CiscoGrammar.Route_map_named_stanzaContext ctx) { }
       // ref
          // iface to xxx
    @Override public void enterIp_policy_if_stanza(@NotNull CiscoGrammar.Ip_policy_if_stanzaContext ctx) { 
@@ -124,6 +125,8 @@ public class CiscoExtractor extends CiscoGrammarBaseListener
    }
    @Override public void enterIp_ospf_router_if_stanza(@NotNull CiscoGrammar.Ip_ospf_router_if_stanzaContext ctx) {
       stat.AddIntraRef(Identifiers.IFACE_T, currentIface, Identifiers.OSPF_T, ctx.procnum.getText());
+         // this is for OSPF
+      stat.IfaceOspfArea(currentIface, ctx.procnum.getText(), ctx.area.getText());
    }
          // bgp to xxx
    @Override public void enterAf_neighbor_route_map_tail(@NotNull CiscoGrammar.Af_neighbor_route_map_tailContext ctx) {
@@ -292,5 +295,160 @@ public class CiscoExtractor extends CiscoGrammarBaseListener
       stat.L2ProtoInst("DOT1Q", null);
    }
    
-  
+   // L3
+      // OSPF
+   @Override public void enterIp_address_if_stanza(@NotNull CiscoGrammar.Ip_address_if_stanzaContext ctx) {
+      if(ctx.ip!=null){
+         stat.IfaceIp(currentIface, ctx.ip.getText(), ctx.subnet.getText());
+      }
+      else{
+         stat.IfaceIP(currentIface, ctx.prefix.getText());
+      }
+   }
+   @Override public void enterIp_address_secondary_if_stanza(@NotNull CiscoGrammar.Ip_address_secondary_if_stanzaContext ctx) {
+      if(ctx.ip!=null){
+         stat.IfaceIp(currentIface, ctx.ip.getText(), ctx.subnet.getText());
+      }
+      else{
+         stat.IfaceIP(currentIface, ctx.prefix.getText());
+      }
+   }
+         // iface ospf is in intra-ref
+   //@Override public void enterIp_ospf_router_if_stanza(@NotNull CiscoGrammar.Ip_ospf_router_if_stanzaContext ctx) { }
+   @Override public void enterNetwork_ro_stanza(@NotNull CiscoGrammar.Network_ro_stanzaContext ctx) {
+      String area;
+      if(ctx.area_int!=null) area = ctx.area_int.getText();
+      else area = ctx.area_ip.getText();
+      if(ctx.ip!=null){
+         stat.OspfNetworkArea(currentOspf, ctx.ip.getText(), ctx.wildcard.getText(), area);
+      }
+      else{
+         stat.OspfNetworkArea(currentOspf, ctx.prefix.getText(), area);
+      }
+   }
+   
+      // BGP
+         // Template
+   String currentTemplate = null;
+   @Override public void enterTemplate_peer_substanza(@NotNull CiscoGrammar.Template_peer_substanzaContext ctx) {
+      currentTemplate = ctx.name.getText();
+   }
+   @Override public void exitTemplate_peer_substanza(@NotNull CiscoGrammar.Template_peer_substanzaContext ctx) { 
+      currentTemplate = null;
+   }
+         // template as
+   @Override public void enterTemplate_remote_as_substanza(@NotNull CiscoGrammar.Template_remote_as_substanzaContext ctx) {
+      stat.BgpTemplateAs(currentTemplate, currentBgp, ctx.asNum.getText());
+   }
+         // group
+   String currentGroup = null;
+   @Override public void enterAf_neighbor_substanza(@NotNull CiscoGrammar.Af_neighbor_substanzaContext ctx) { 
+      if(ctx.group!=null)
+         currentGroup = ctx.group.getText();
+      else if(ctx.ip!=null){
+         currentNeighborAddr = ctx.ip.getText();
+         currentNeighborMask = "255.255.255.255";
+      }
+   }
+
+   @Override public void exitAf_neighbor_substanza(@NotNull CiscoGrammar.Af_neighbor_substanzaContext ctx) { 
+      currentGroup = null;
+      currentNeighborAddr = null;
+      currentNeighborMask = null;
+   }
+   @Override public void enterNeighbor_standalone_substanza(@NotNull CiscoGrammar.Neighbor_standalone_substanzaContext ctx) { 
+      if(ctx.peergroup!=null)
+         currentGroup = ctx.peergroup.getText();
+      else if(ctx.ip!=null){
+         currentNeighborAddr = ctx.ip.getText();
+         currentNeighborMask = "255.255.255.255";
+      }
+   }
+   @Override public void exitNeighbor_standalone_substanza(@NotNull CiscoGrammar.Neighbor_standalone_substanzaContext ctx) { 
+      currentGroup = null;
+      currentNeighborAddr = null;
+      currentNeighborMask = null;
+   }
+         // neighbor
+   String currentNeighborAddr = null;
+   String currentNeighborMask = null;
+   //@Override public void enterAf_neighbor_substanza(@NotNull CiscoGrammar.Af_neighbor_substanzaContext ctx) { }
+   @Override public void enterNeighbor_nexus_substanza(@NotNull CiscoGrammar.Neighbor_nexus_substanzaContext ctx) {
+      if(ctx.ip!=null){
+         currentNeighborAddr = ctx.ip.getText();
+         currentNeighborMask = "255.255.255.255";         
+      }
+      else if(ctx.prefix!=null){
+         String pair[] = Util.getIpMaskFromPrefix(ctx.prefix.getText());
+         currentNeighborAddr = pair[0];
+         currentNeighborMask = pair[1];
+      }
+      // as number
+      if(ctx.asNum!=null){
+         stat.BgpNeighborAs(currentBgp, currentNeighborAddr, currentNeighborMask, ctx.asNum.getText());
+      }
+   }
+   @Override public void exitNeighbor_nexus_substanza(@NotNull CiscoGrammar.Neighbor_nexus_substanzaContext ctx) {
+      currentNeighborAddr = null;
+      currentNeighborMask = null;
+   }
+   //@Override public void enterNeighbor_standalone_substanza(@NotNull CiscoGrammar.Neighbor_standalone_substanzaContext ctx) { }
+   @Override public void enterVrf_neighbor_nexus_stanza(@NotNull CiscoGrammar.Vrf_neighbor_nexus_stanzaContext ctx) {
+      if(ctx.ip!=null){
+         currentNeighborAddr = ctx.ip.getText();
+         currentNeighborMask = "255.255.255.255";         
+      }
+   }
+   @Override public void exitVrf_neighbor_nexus_stanza(@NotNull CiscoGrammar.Vrf_neighbor_nexus_stanzaContext ctx) {
+      currentNeighborAddr = null;
+      currentNeighborMask = null;
+   }
+      // neighbor as
+   @Override public void enterNeighbor_nexus_remote_as_substanza(@NotNull CiscoGrammar.Neighbor_nexus_remote_as_substanzaContext ctx) { 
+      stat.BgpNeighborAs(currentBgp, currentNeighborAddr, currentNeighborMask, ctx.asNum.getText());
+   }
+   //@Override public void enterNeighbor_nexus_substanza(@NotNull CiscoGrammar.Neighbor_nexus_substanzaContext ctx) { }
+   @Override public void enterAf_neighbor_remote_as_tail(@NotNull CiscoGrammar.Af_neighbor_remote_as_tailContext ctx) {
+      if(currentGroup != null){
+         stat.BgpGroupAs(currentGroup, currentBgp, ctx.asNum.getText());
+      }
+      else if(currentNeighborAddr!=null){
+         stat.BgpNeighborAs(currentBgp, currentNeighborAddr, currentNeighborMask, ctx.asNum.getText());
+      }
+   }
+   @Override public void enterNeighbor_remote_as_tail(@NotNull CiscoGrammar.Neighbor_remote_as_tailContext ctx) {
+      if(currentGroup != null){
+         stat.BgpGroupAs(currentGroup, currentBgp, ctx.asNum.getText());
+      }
+      else if(currentNeighborAddr!=null){
+         stat.BgpNeighborAs(currentBgp, currentNeighborAddr, currentNeighborMask, ctx.asNum.getText());
+      }
+   }
+      // neighbor group
+   @Override public void enterAf_neighbor_peer_group_tail(@NotNull CiscoGrammar.Af_neighbor_peer_group_tailContext ctx) {
+      stat.BgpNeighborGroup(currentBgp, currentNeighborMask, currentNeighborMask, ctx.group.getText());
+   }
+   @Override public void enterNeighbor_peer_group_tail(@NotNull CiscoGrammar.Neighbor_peer_group_tailContext ctx) { 
+      if(ctx.group!=null){
+         stat.BgpNeighborGroup(currentBgp, currentNeighborMask, currentNeighborMask, ctx.group.getText());
+      }
+   }
+      // a neighbor nexus may cancel its remote-as, not sure how to deal with this now
+   @Override public void enterNeighbor_nexus_no_remote_as_substanza(@NotNull CiscoGrammar.Neighbor_nexus_no_remote_as_substanzaContext ctx) {
+   }
+      // neighbor template
+   @Override public void enterNeighbor_inherit_tail(@NotNull CiscoGrammar.Neighbor_inherit_tailContext ctx) {
+      stat.BgpNeighborTemplate(currentBgp, currentNeighborAddr, currentNeighborMask, ctx.template.getText());
+   }
+   @Override public void enterNeighbor_nexus_inherit_substanza(@NotNull CiscoGrammar.Neighbor_nexus_inherit_substanzaContext ctx) {
+      stat.BgpNeighborTemplate(currentBgp, currentNeighborAddr, currentNeighborMask, ctx.peer.getText());
+   }
+   @Override public void enterVrf_neighbor_inherit_substanza(@NotNull CiscoGrammar.Vrf_neighbor_inherit_substanzaContext ctx) {
+      stat.BgpNeighborTemplate(currentBgp, currentNeighborAddr, currentNeighborMask, ctx.peer.getText());
+      
+   }
+   @Override public void enterTemplate_inherit_substanza(@NotNull CiscoGrammar.Template_inherit_substanzaContext ctx) {
+      stat.BgpTemplateInheritTemplate(currentBgp, currentTemplate, ctx.inherit.getText());
+   }
+   
 }

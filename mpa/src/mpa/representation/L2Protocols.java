@@ -84,6 +84,7 @@ public class L2Protocols {
          }
       }
       protoInst.put("MSTP", count);
+      processed = true;
    }
    
    public String toString(){

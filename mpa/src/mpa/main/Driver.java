@@ -15,10 +15,14 @@ public class Driver {
       }
       // TODO Auto-generated method stub
       Mpa mpa = new Mpa(args[0], args[1], 5);
+      System.out.println("====================================================");
+      System.out.println("MPA start parsing");
+      System.out.println("====================================================");
       mpa.Start();
       mpa.WriteFailures("failures.csv");
-      Map<String, Statistics> stat = mpa.GetStat();
-      System.out.println("TODO: output stat");
+      System.out.println("====================================================");
+      System.out.println("MPA write statistics");
+      System.out.println("====================================================");
       mpa.WriteStatistics("statistics.csv");
    }
 }

@@ -272,7 +272,7 @@ public class Mpa {
       System.out.println("stamp, device, config, vendor, model, role, architecture");
       System.out.println("vlanDeclared, vlanInst");
       System.out.println(Util.Join(", ", Configs.L2Protocols));
-      System.out.println("L3");
+      System.out.println("OSPF, BGP");
       System.out.println("References");
       String out="";
       for(Map.Entry<String, Statistics> entry: stats.entrySet()){

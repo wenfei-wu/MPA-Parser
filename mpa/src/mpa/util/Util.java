@@ -55,6 +55,13 @@ public class Util {
       return pair.substring(0, slashPos);
    }
 
+   public static String[] getIpMaskFromPrefix(String prefix){      
+      String addr = getIpFromIpSubnetPair(prefix);
+      int numMaskBits = getPrefixLengthFromIpSubnetPair(prefix);
+      long maskLong = numSubnetBitsToSubnetLong(numMaskBits);
+      String mask = longToIp(maskLong);
+      return new String[]{addr, mask};
+   }
    public static long getNetworkEnd(long networkStart, int prefix_length) {
       long networkEnd = networkStart;
       int ones_length = 32 - prefix_length;

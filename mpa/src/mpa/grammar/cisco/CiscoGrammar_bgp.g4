@@ -147,6 +147,11 @@ neighbor_filter_list_tail
    FILTER_LIST list = DEC ( IN | OUT )? NEWLINE
 ;
 
+neighbor_inherit_tail
+:
+   INHERIT PEER_SESSION template = VARIABLE NEWLINE
+;
+
 neighbor_nexus_af_filter_list_substanza
 :
    FILTER_LIST list = DEC ( IN | OUT )? NEWLINE
@@ -294,6 +299,7 @@ neighbor_standalone_substanza
    )
    (
       neighbor_filter_list_tail
+      | neighbor_inherit_tail
       | neighbor_null_tail
       | neighbor_peer_group_tail
       | neighbor_prefix_list_tail

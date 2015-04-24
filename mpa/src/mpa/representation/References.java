@@ -19,7 +19,7 @@ public class References {
       intra_ref = new ArrayList<String[]>();
    }
    
-   public void AddRefEntity(String type, String name){  // there may be duplicated 
+   public void AddRefEntity(String type, String name){  // there may be duplications
       entities.add(new String[]{type, name});
    }
    public void AddIntraReferences(String from_t, String from_n, String to_t, String to_n){
@@ -30,12 +30,18 @@ public class References {
    // inter_ref
       // bgp
    
-   
+      // ospf
    
    
    @Override
    public String toString(){
-      return intra_ref.size()+",0";
+    /*  if(intra_ref.size()!=0){
+         System.out.println("not zero");
+         String ret = ""+intra_ref.size();
+         System.out.println("ret: "+ret);
+      }
+      */
+      return ""+intra_ref.size();
    }
 
 }
