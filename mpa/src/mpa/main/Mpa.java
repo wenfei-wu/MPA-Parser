@@ -44,6 +44,7 @@ public class Mpa {
 	Lock inputLock, outputLock;
 	MpaThread mpaThreads[];
 	Queue<String> files = new LinkedList<String>();
+	int numFiles;
 
    long startTime;
 	public Mpa(String flist, String source_root, int nThread){
@@ -60,11 +61,11 @@ public class Mpa {
 		for(int i = 0; i<numThread; i++){
 		   mpaThreads[i] = new MpaThread(i);
 		}
-		startTime = System.nanoTime();
 	}
 	
 	public void Start(){
 		Input();
+      startTime = System.nanoTime();
 		Process();
 	}
 	
@@ -105,6 +106,7 @@ public class Mpa {
       } catch (IOException e) {
          e.printStackTrace();
       }
+      numFiles = files.size();
   //    System.out.println("Input: read "+files.size()+" files.");
    }
 
@@ -150,10 +152,11 @@ public class Mpa {
             failures += localFailure;
             long endTime = System.nanoTime();    
             long elapsed = (endTime - startTime)/1000000000; // in second
-            System.out.println(count+" file processed in "+elapsed+" second, report from thread "+index+", localCount is "+localCount);
+            System.out.println(count+" file processed in "+elapsed+" seconds, reported from thread "+index);
+                  //+", localCount is "+localCount);
           //  System.out.println("localFalures: "+localFailure);
             // clean for next output
-            System.out.println("localCount is "+localCount+", localOutput size is "+localOutput.size());
+            //System.out.println("localCount is "+localCount+", localOutput size is "+localOutput.size());
             localOutput.clear();
             localCount = 0;
             localFailure = "";
