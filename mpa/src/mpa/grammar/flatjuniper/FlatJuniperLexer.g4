@@ -216,6 +216,11 @@ BIFF
    'biff'
 ;
 
+BOOTP
+:
+   'bootp'
+;
+
 BOOTPC
 :
    'bootpc'
@@ -650,6 +655,11 @@ HELLO_INTERVAL
    'hello-interval'
 ;
 
+HELPERS
+:
+   'helpers'
+;
+
 HOLD_TIME
 :
    'hold-time'
@@ -938,6 +948,11 @@ LABEL_SWITCHED_PATH
 LABELED_UNICAST
 :
    'labeled-unicast'
+;
+
+LACP
+:
+   'lacp'
 ;
 
 LAN

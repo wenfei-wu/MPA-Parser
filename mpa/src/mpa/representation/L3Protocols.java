@@ -60,6 +60,12 @@ public class L3Protocols {
       String mask_str = Util.longToIp(maskLong);
       ospf_subnet_mask_area.add(new String[]{proc, addr_str, mask_str, area});
    }
+   
+      // juniper is different,   <area, iface>
+   List<String[]> area_iface = new ArrayList<String[]>();
+   public void OspfAreaIface(String area, String iface){
+      area_iface.add(new String[]{area, iface});
+   }
    // OSPF instance:   <process_id, area, iface, addr, mask> where addr in subnet
    public int OspfInst(){
       int count = 0;
@@ -90,6 +96,8 @@ public class L3Protocols {
                count+=1;
          }
       }
+      // finally juniper
+      count+= area_iface.size();
       return count;
    }
 

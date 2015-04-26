@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class References {
-   public final String INTERFACE_T = "interface";
-   public final String ACL_T = "acl";
-   public final String ROUTER_T = "router";
-   public final String ROUTEMAP_T = "routemap";
    
    // intra_ref
    // entity :  type, name

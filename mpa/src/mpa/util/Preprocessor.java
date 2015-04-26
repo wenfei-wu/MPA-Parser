@@ -58,11 +58,15 @@ public class Preprocessor {
       return out;
    }
    private String JuniperProcess(String file) throws IOException {
+      String CLAIM = "!";
       String content="";
       BufferedReader br = new BufferedReader(new FileReader(file));  
       String line = null;  
       while ((line = br.readLine()) != null)  
       {
+         if(line.startsWith(CLAIM)){
+            continue;
+         }
          content+= line+"\n";
       }
       MpaCombinedParser<?,?> parser = new JuniperCombinedParser(content);

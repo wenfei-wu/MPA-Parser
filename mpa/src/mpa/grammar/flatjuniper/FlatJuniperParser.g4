@@ -30,6 +30,7 @@ flat_juniper_configuration
 statement
 :
    s_firewall
+   | s_forwarding_options
    | s_interfaces
    | s_null
    | s_policy_options
@@ -37,6 +38,20 @@ statement
    | s_routing_instances
    | s_routing_options
    | s_system
+;
+
+s_forwarding_options
+:
+   FORWARDING_OPTIONS
+   ( 
+      ( HELPERS BOOTP INTERFACE fo_helper_bootp_interface_tail )
+      |  s_null_filler
+   )
+;
+
+fo_helper_bootp_interface_tail
+:
+   name = VARIABLE s_null_filler
 ;
 
 s_groups

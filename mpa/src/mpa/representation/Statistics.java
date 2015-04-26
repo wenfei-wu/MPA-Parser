@@ -1,8 +1,5 @@
 package mpa.representation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mpa.util.Util;
 
 public class Statistics {
@@ -64,6 +61,9 @@ public class Statistics {
    public void OspfNetworkArea(String proc, String prefix, String area){
       l3protocols.OspfNetworkArea(proc, prefix, area);
    }
+   public void OspfAreaIface(String area, String iface){
+      l3protocols.OspfAreaIface(area, iface);
+   }
       // BGP
    public void BgpNeighborAs(String local_as, String addr, String mask, String remote_as){
       l3protocols.BgpNeighborAs(local_as, addr, mask, remote_as);
@@ -89,5 +89,9 @@ public class Statistics {
       String fields[] = new String[] {vlans.toString(), l2protocols.toString(), 
             l3protocols.toString(), references.toString() };
       return Util.Join(",", fields);
+   }
+   
+   public void L2NumIface(int size) {
+      l2protocols.L2NumIface(size);      
    }
 }

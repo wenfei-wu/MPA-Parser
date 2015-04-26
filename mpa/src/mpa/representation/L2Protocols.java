@@ -28,15 +28,23 @@ public class L2Protocols {
    // in instance 1 or 2 form the 3rd spanning tree. So there should
    // be 3 spanning tree instances.
    // I process them in the function ProcessSpecialProtocols()
+   
+   // LLDP: may configure "all", then we need the total number of interfaces
 
    List<String> MSTP_instances;
+   int numIface = 0;
+   Set<String> LLDP_instances;
+   
    public L2Protocols(){
       protoInst = new HashMap<String, Integer>();
       
       for(int i = 0; i< Configs.L2Protocols.length; i++){
          protoInst.put(Configs.L2Protocols[i], 0);
       }
+      
+      
       MSTP_instances = new ArrayList<String>();
+      LLDP_instances = new HashSet<String>();
    }
    
    public void DeclareProtocol(String proto){
@@ -51,6 +59,10 @@ public class L2Protocols {
          MSTP_instances.add(info);
          return;
       }
+      else if(proto.equals("LLDP")){
+         LLDP_instances.add(info);
+         return ;
+      }
       
       if( ! protoInst.containsKey(proto)){
          protoInst.put(proto, 1);
@@ -59,6 +71,10 @@ public class L2Protocols {
          int value = protoInst.get(proto);
          protoInst.put(proto, value+1);
       }
+   }
+   
+   public void L2NumIface(int count){
+      numIface = count;
    }
    
    boolean processed = false;
@@ -84,6 +100,13 @@ public class L2Protocols {
          }
       }
       protoInst.put("MSTP", count);
+      // LLDP
+      if(LLDP_instances.contains("all")){
+         protoInst.put("LLDP", numIface);
+      }
+      else{
+         protoInst.put("LLDP", LLDP_instances.size());
+      }
       processed = true;
    }
    

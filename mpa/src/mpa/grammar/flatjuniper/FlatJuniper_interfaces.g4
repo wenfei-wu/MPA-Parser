@@ -13,7 +13,7 @@ brt_interface_mode
 
 brt_vlan_id_list
 :
-   VLAN_ID_LIST DEC
+   VLAN_ID_LIST id = DEC
 ;
 
 direction
@@ -114,7 +114,7 @@ ifamat_vrrp_group_tail
 
 ifamt_address
 :
-   ADDRESS IP_PREFIX ifamt_address_tail?
+   ADDRESS prefix = IP_PREFIX ifamt_address_tail?
 ;
 
 ifamt_address_tail
@@ -127,7 +127,7 @@ ifamt_address_tail
 
 ifamt_filter
 :
-   filter
+   name = filter
 ;
 
 ifamt_mtu
@@ -150,6 +150,24 @@ interface_mode
    TRUNK
 ;
 
+it_agg_lacp
+:
+   LACP
+   (
+      a = ACTIVE
+      | s_null_filler
+   )
+;
+
+it_aggregated_eth_options
+:
+   AGGREGATED_ETHER_OPTIONS
+   (
+      it_agg_lacp
+      | s_null_filler
+   )
+;
+
 it_apply_groups
 :
    s_apply_groups
@@ -162,7 +180,8 @@ it_apply_groups_except
 
 it_common
 :
-   it_apply_groups
+   it_aggregated_eth_options
+   | it_apply_groups
    | it_apply_groups_except
    | it_description
    | it_disable
@@ -212,8 +231,7 @@ it_mtu
 it_null
 :
    (
-      AGGREGATED_ETHER_OPTIONS
-      | BANDWIDTH
+      BANDWIDTH
       | ENCAPSULATION
       | GIGETHER_OPTIONS
       | INTERFACE_TRANSMIT_STATISTICS
@@ -313,7 +331,7 @@ s_interfaces
 :
    INTERFACES
    (
-      WILDCARD
+      wild = WILDCARD
       | name = VARIABLE
       | // intentional blank
 

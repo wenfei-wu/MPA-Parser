@@ -7,6 +7,11 @@ options {
    tokenVocab = FlatJuniperLexer;
 }
 
+lldp_interface
+:
+   INTERFACE name = variable
+;
+
 s_protocols
 :
    PROTOCOLS s_protocols_tail
@@ -16,10 +21,20 @@ s_protocols_tail
 :
    s_protocols_bgp
    | s_protocols_isis
+   | s_protocols_lldp
    | s_protocols_mpls
    | s_protocols_null
    | s_protocols_ospf
    | s_protocols_ospf3
+;
+
+s_protocols_lldp
+:
+   LLDP
+   (
+      lldp_interface
+      | s_null_filler
+   )
 ;
 
 s_protocols_null
@@ -29,7 +44,7 @@ s_protocols_null
       | IGMP
       | L2CIRCUIT
       | LDP
-      | LLDP
+     // | LLDP
       | MLD
       | MSDP
       | PIM

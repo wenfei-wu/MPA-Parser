@@ -1,12 +1,17 @@
 package mpa.main;
 
-import java.util.Map;
-
-import mpa.representation.Statistics;
-
 public class Driver {
 
    public static void main(String[] args) {  
+      boolean debug = false;
+      String root = "root";
+      String filelist = "juniper_examples.csv";
+      if(debug){
+         Debug d = new Debug(root, filelist);
+         d.Run();
+         return ;
+      }
+      
       if(args.length!=3){
          System.out.println("Error intput argument number: "+args.length);
          System.out.println("Usage: mpa <config_list file> <src root> <output path>");

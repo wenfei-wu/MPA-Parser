@@ -35,7 +35,7 @@ fwfromt_destination_port
 
 fwfromt_destination_prefix_list
 :
-   DESTINATION_PREFIX_LIST variable
+   DESTINATION_PREFIX_LIST name = variable
 ;
 
 fwfromt_dscp
@@ -79,7 +79,7 @@ fwfromt_port
 
 fwfromt_prefix_list
 :
-   PREFIX_LIST variable
+   PREFIX_LIST name = variable
 ;
 
 fwfromt_protocol
@@ -107,7 +107,7 @@ fwfromt_source_port
 
 fwfromt_source_prefix_list
 :
-   SOURCE_PREFIX_LIST variable
+   SOURCE_PREFIX_LIST name = variable
 ;
 
 fwfromt_tcp_established

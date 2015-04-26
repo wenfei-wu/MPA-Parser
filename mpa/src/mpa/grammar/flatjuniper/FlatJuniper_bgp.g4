@@ -226,8 +226,8 @@ bt_neighbor
 :
    NEIGHBOR
    (
-      IP_ADDRESS
-      | IPV6_ADDRESS
+      ip = IP_ADDRESS
+      | ip = IPV6_ADDRESS
    ) bt_neighbor_tail
 ;
 
@@ -273,8 +273,8 @@ bt_type
 :
    TYPE
    (
-      EXTERNAL
-      | INTERNAL
+      t = EXTERNAL
+      | t = INTERNAL
    )
 ;
 
@@ -298,7 +298,7 @@ policy_expression
    pe_conjunction
    | pe_disjunction
    | pe_nested
-   | variable
+   | name = variable
 ;
 
 pst_always_compare_med

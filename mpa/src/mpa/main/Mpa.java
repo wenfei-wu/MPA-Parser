@@ -92,21 +92,17 @@ public class Mpa {
    }
 
    private void Input() {
-      // TODO Auto-generated method stub
-
       BufferedReader br = null;
       try {
          br = new BufferedReader(new FileReader(fileList));
       } catch (FileNotFoundException e) {
-         // TODO Auto-generated catch block
          e.printStackTrace();
-      }  
+      }
       String line = null;  
       try {
          while ((line = br.readLine()) != null)  
             files.add(line);
       } catch (IOException e) {
-         // TODO Auto-generated catch block
          e.printStackTrace();
       }
   //    System.out.println("Input: read "+files.size()+" files.");

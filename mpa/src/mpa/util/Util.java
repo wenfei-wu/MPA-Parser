@@ -329,4 +329,12 @@ public class Util {
       }
       return out;
    }
+   
+   public static boolean JuniperMatch(String str, String pattern){
+      pattern = pattern.trim();
+      int length = pattern.length();
+      pattern = pattern.substring(1, length-1);
+      pattern = pattern.replace("*", ".*");
+      return str.matches(pattern);
+   }
 }
