@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.locks.Lock;
@@ -163,15 +165,19 @@ public class Mpa {
          if(last || localCount >= PER_THREAD_FILES_PER_REPORT){
             if(statfile!=null){
                String out="";
+               List<String> toRemove = new ArrayList<String>();
                for(Map.Entry<String, Statistics> entry: localStat.entrySet()){
                   try{
                      out+=entry.getKey()+","+entry.getValue()+"\n";
                   } catch(Exception e){
                      localFailure+=entry.getKey()+"\n";
-                     localStat.remove(entry.getKey());
+                     toRemove.add(entry.getKey());
                   }
                }
                FileIO.WriteToFile(out, statfile, true);
+               for(String remove: toRemove){
+                  localStat.remove(remove);
+               }
             }
             if(failfile != null){
                FileIO.WriteToFile(localFailure, failfile, true);
@@ -327,13 +333,17 @@ public class Mpa {
          return ;
       }
       String out="";
+      List<String> toRemove = new ArrayList<String>();
       for(Map.Entry<String, Statistics> entry: stats.entrySet()){
          try{
             out+=entry.getKey()+","+entry.getValue()+"\n";
          } catch(Exception e){
             failures+=entry.getKey()+"\n";
-            stats.remove(entry.getKey());
+            toRemove.add(entry.getKey());
          }
+      }
+      for(String remove: toRemove){
+         stats.remove(remove);
       }
       FileIO.WriteToFile(out, "statistics.csv", false);
    }
