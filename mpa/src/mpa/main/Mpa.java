@@ -40,6 +40,7 @@ public class Mpa {
 	String root;
 	Map<String, Statistics> stats;
 	String statfile;
+	String failfile;
 	String failures;
 	String warnings;
 	int count;
@@ -50,7 +51,7 @@ public class Mpa {
 	int numFiles;
 
    long startTime;
-	public Mpa(String flist, String source_root, int nThread, String sfile){
+	public Mpa(String flist, String source_root, int nThread, String sfile, String ffile){
 	   fileList = flist;
 		numThread = nThread;
 		root = source_root;
@@ -58,6 +59,10 @@ public class Mpa {
 		statfile = sfile;
 		if(statfile != null){
 		   FileIO.WriteToFile("", statfile, false);
+		}
+		failfile = ffile;
+		if(failfile != null){
+		   FileIO.WriteToFile("", failfile, false);
 		}
 		failures = "";
 		warnings = "";
@@ -167,6 +172,9 @@ public class Mpa {
                   }
                }
                FileIO.WriteToFile(out, statfile, true);
+            }
+            if(failfile != null){
+               FileIO.WriteToFile(localFailure, failfile, true);
             }
             stats.putAll(localStat);
             count+=localCount;
@@ -300,7 +308,8 @@ public class Mpa {
    }
    
    public void WriteFailures(String filename) {
-      FileIO.WriteToFile(failures, filename, false);
+      if(filename != null)
+         FileIO.WriteToFile(failures, filename, false);
    }
    
    public void WriteWarnings(String filename){
