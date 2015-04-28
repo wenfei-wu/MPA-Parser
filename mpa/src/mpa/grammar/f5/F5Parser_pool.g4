@@ -25,7 +25,7 @@ pool_monitor_substanza
 :
    MONITOR ALL 
    ( 
-      pm_monitor ( AND pm_monitor )+
+      pm_monitor ( AND pm_monitor )*
       | MIN NUMBER OF pm_monitor+
       | protocols
    ) NEWLINE
