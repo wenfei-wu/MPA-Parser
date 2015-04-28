@@ -13,13 +13,13 @@ ltm_stanza
 	   | PROFILE profile_protocols ltm_profile_tail
 	   | VIRTUAL ltm_virtual_tail
 	   | ltm_other_tail
-	)? OPEN_BRACE NEWLINE
-	ltm_substanza* CLOSE_BRACE NEWLINE
+	)? OPEN_BRACE NEWLINE*
+	ltm_substanza* CLOSE_BRACE ~NEWLINE* NEWLINE
 ;
 
 ltm_monitor_tail
 :
-    ltm_protocols name = WORD
+    ltm_protocols ( name = WORD | ltm_protocols )
 ;
 
 ltm_pool_tail
@@ -29,7 +29,7 @@ ltm_pool_tail
 
 ltm_profile_tail
 :
-    name = WORD
+    name = WORD | profile_protocols
 ;
 
 ltm_virtual_tail
@@ -55,7 +55,7 @@ ltm_protocols
    | ICMP
    | IMAP
    | INBAND
-   | LADP
+   | LDAP
    | MODULE_SCORE
    | MSSQL
    | MYSQL

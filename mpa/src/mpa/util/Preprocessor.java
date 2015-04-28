@@ -47,12 +47,14 @@ public class Preprocessor {
       String MONITOR = "monitor";
       String currentStanza = null;
       
+      boolean inVirtualProfile = false;
+      
       String out = "";
       BufferedReader br = new BufferedReader(new FileReader(file));  
       String line = null;  
       while ((line = br.readLine()) != null)  
       {
-         if(line.startsWith(POOL)){
+         if(line.startsWith(POOL) && line.endsWith("{")){
             currentStanza = POOL;
             out+= line+"\n";
          }
@@ -81,15 +83,38 @@ public class Preprocessor {
          else if(!line.startsWith(" ")){
             
          }
-         else{
+         else{ // line starts with " "
             if(currentStanza == null){
                
             }
             else if(currentStanza.equals(VIRTUAL)){
-               out+= line+"\n";               
+               if(line.startsWith("   pool")){
+                  out+= line+"\n";
+               }
+               else if(line.startsWith("   profiles")){
+                  if(line.endsWith("{"))
+                     inVirtualProfile = true;
+                  if(line.endsWith("{") || line.endsWith("}"))
+                     out+= line+"\n";
+               }
+               else if(line.startsWith("   }")){
+                  if(inVirtualProfile){
+                     out+= line+"\n";
+                  }
+                  inVirtualProfile = false;
+               }
+               else if(line.startsWith("    ")){ // subsubstanza
+                  if(inVirtualProfile && !line.startsWith("         ")){
+                     out+=line+"\n";
+                  }
+               }
+               else{
+                  inVirtualProfile = false;                  
+               }
             }
             else if(currentStanza.equals(POOL)){
-               out+= line+"\n";               
+               if(line.startsWith("   monitor"))
+                  out+= line+"\n";
             }
          }
       }

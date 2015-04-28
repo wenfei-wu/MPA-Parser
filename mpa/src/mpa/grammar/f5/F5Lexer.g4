@@ -19,6 +19,32 @@ CLOSE_BRACE
    '}'
 ;
 
+
+OPEN_BRACKET
+:
+   '['
+;
+
+CLOSE_BRACKET
+:
+   ']'
+;
+
+ADDRESS
+:
+   'address'
+;
+
+AND
+:
+   'and'
+;
+
+ANY
+:
+   'any'
+;
+
 CERTIFICATE_AUTHORITY
 :
    'certificate-authority'
@@ -180,6 +206,11 @@ PROFILE
    'profile'
 ;
 
+PROFILES
+:
+   'profiles'
+;
+
 VIRTUAL
 :
    'virtual'
@@ -247,7 +278,7 @@ EXTERNAL
 
 FASTL4
 :
-   'fastl4'
+   'fastL4' | 'fastl4'
 ;
 
 FIREPASS
@@ -300,14 +331,19 @@ INBAND
    'inband'
 ;
 
-LADP
+LDAP
 :
-   'ladp'
+   'ldap'
 ;
 
 MESSAGE_ROUTING
 :
    'message-routing'
+;
+
+MIN
+:
+   'min'
 ;
 
 MODULE_SCORE
@@ -338,6 +374,11 @@ NODE
 NONE
 :
    'none'
+;
+
+OF
+:
+   'of'
 ;
 
 ONECONNECT
@@ -503,9 +544,15 @@ WMI
    'wmi'
 ;
 
-NEWLINE
+NUMBER
 :
-   F_NewlineChar+
+   F_Digit+
+;
+
+IP_ADDRESS
+:
+   F_DecByte '.'
+   F_DecByte '.' F_DecByte '.' F_DecByte
 ;
 
 WORD
@@ -514,10 +561,16 @@ WORD
    | F_WordChar+
 ;
 
+NEWLINE
+:
+   F_NewlineChar+
+;
+
 WS
 :
    F_WhitespaceChar+ -> channel(HIDDEN)
 ;
+
 
 fragment
 F_NewlineChar
@@ -534,11 +587,36 @@ F_QuotedString
 fragment
 F_WhitespaceChar
 :
-   [ \t\u000C\r\n]
+   [ \t\u000C]
 ;
 
 fragment
 F_WordChar
 :
    ~[ \t\u000C\r\n;{}[\]"#()]
+;
+
+fragment
+F_DecByte
+:
+   (
+      F_PositiveDigit F_Digit F_Digit
+   )
+   |
+   (
+      F_PositiveDigit F_Digit
+   )
+   | F_Digit
+;
+
+fragment
+F_Digit
+:
+   ('0'..'9')
+;
+
+fragment
+F_PositiveDigit
+:
+   '1' .. '9'
 ;

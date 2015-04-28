@@ -26,3 +26,55 @@ f5_configuration
 ;
 
 
+
+protocols
+:
+   (
+      CERTIFICATE_AUTHORITY
+      | CLASSIFICATION
+      | CLIENT_SSL
+      | CLIENTSSL
+      | DIAMETER
+      | DNS
+      | FASTHTTP
+      | FASTL4
+      | FIX
+      | FTP
+      | GTP
+      | HTML
+      | HTTP
+      | HTTPCLASS
+      | HTTP_COMPRESSION
+      | HTTPS
+      | ICAP
+      | IPOTHER
+      | MBLB
+      | MSSQL
+      | NTLM
+      | ONE_CONNECT
+      | ONECONNECT
+      | PERSIST
+      | PPTP
+      | QOE
+      | RADIUS
+      | REQUEST_ADAPT
+      | REQUEST_LOG
+      | RESPONSE_ADAPT
+      | REWRITE
+      | RTSP
+      | SCTP
+      | SERVER_SSL
+      | SERVERSSL
+      | SIP
+      | SMTP
+      | SMTPS
+      | SOCKS
+      | SPDY
+      | STATISTICS
+      | STREAM
+      | TCP
+      | UDP
+      | WEB_ACCELERATION
+      | XML
+   )
+;

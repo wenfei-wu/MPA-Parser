@@ -7,7 +7,7 @@ options {
 
 virtual_stanza
 :
-   VIRTUAL name = WORD OPEN_BRACE NEWLINE
+   VIRTUAL ( name = WORD | virtual_other ) OPEN_BRACE NEWLINE
    virtual_substanza*
    CLOSE_BRACE NEWLINE
 ;
@@ -27,16 +27,21 @@ virtual_pool_substanza
 
 virtual_profile_substanza
 :
-   PROFILE
+   PROFILES
    (
       name = WORD OPEN_BRACE CLOSE_BRACE 
-      | OPEN_BRACE vp_profiles_substanza+ CLOSE_BRACE
+      | OPEN_BRACE NEWLINE vp_profiles_substanza+ CLOSE_BRACE
    ) NEWLINE
 ;
 
 vp_profiles_substanza
 :
-   name = WORD OPEN_BRACE CLOSE_BRACE NEWLINE
+   (
+      name = WORD 
+      | HTTP
+      | TCP
+      | DNS
+   )OPEN_BRACE NEWLINE* CLOSE_BRACE NEWLINE
 ;
 
 virtual_other_substanza
@@ -44,4 +49,13 @@ virtual_other_substanza
    (
       SNATPOOL
    ) ~NEWLINE* NEWLINE
+;
+
+virtual_other
+:
+   ADDRESS 
+   (
+      ANY
+      | IP_ADDRESS
+   )
 ;

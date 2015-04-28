@@ -24,6 +24,12 @@ public class Identifiers {
    public final static String TERM_T = "term";
    public final static String R_INST_T = "routing-instance";
    public final static String R_OPT_T = "routing-options";
+      // F5
+   public final static String VIRTUAL_T = "virtual";
+   public final static String POOL_T = "pool";
+   public final static String PROFILE_T = "profile";
+   public final static String LTM_T = "ltm";
+   public final static String MONITOR_T = "monitor";
    
    // address format
    //public final String IP_F = "ip";
