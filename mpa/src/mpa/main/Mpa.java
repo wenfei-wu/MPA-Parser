@@ -121,7 +121,7 @@ public class Mpa {
    private class MpaThread implements Runnable{
       int index ;
       Queue<String> localFiles;
-      HashMap<String, Statistics> localOutput;
+      HashMap<String, Statistics> localStat;
       
       int countInRound;
       int localCount;
@@ -130,7 +130,7 @@ public class Mpa {
       public MpaThread(int i){
          index= i;
          localFiles = new LinkedList<String>();
-         localOutput = new HashMap<String, Statistics>();
+         localStat = new HashMap<String, Statistics>();
          localCount = 0;
          localFailure = "";
          localWarning = "";
@@ -158,12 +158,17 @@ public class Mpa {
          if(last || localCount >= PER_THREAD_FILES_PER_REPORT){
             if(statfile!=null){
                String out="";
-               for(Map.Entry<String, Statistics> entry: stats.entrySet()){
-                  out+=entry.getKey()+","+entry.getValue()+"\n";
+               for(Map.Entry<String, Statistics> entry: localStat.entrySet()){
+                  try{
+                     out+=entry.getKey()+","+entry.getValue()+"\n";
+                  } catch(Exception e){
+                     localFailure+=entry.getKey()+"\n";
+                     localStat.remove(entry.getKey());
+                  }
                }
                FileIO.WriteToFile(out, statfile, true);
             }
-            stats.putAll(localOutput);
+            stats.putAll(localStat);
             count+=localCount;
             failures += localFailure;
             warnings += localWarning;
@@ -174,7 +179,7 @@ public class Mpa {
           //  System.out.println("localFalures: "+localFailure);
             // clean for next output
             //System.out.println("localCount is "+localCount+", localOutput size is "+localOutput.size());
-            localOutput.clear();
+            localStat.clear();
             localCount = 0;
             localFailure = "";
             localWarning = "";
@@ -201,7 +206,7 @@ public class Mpa {
             String file = root+'/'+stamp+'/'+device+'/'+config;
             Statistics stat  = parseVendorConfigurations(vendor, file);            
             if(stat!=null){
-               localOutput.put(line, stat);
+               localStat.put(line, stat);
                if(stat.HasWarning()){
                   localWarning+= line+"\n";
                }
@@ -314,7 +319,12 @@ public class Mpa {
       }
       String out="";
       for(Map.Entry<String, Statistics> entry: stats.entrySet()){
-         out+=entry.getKey()+","+entry.getValue()+"\n";
+         try{
+            out+=entry.getKey()+","+entry.getValue()+"\n";
+         } catch(Exception e){
+            failures+=entry.getKey()+"\n";
+            stats.remove(entry.getKey());
+         }
       }
       FileIO.WriteToFile(out, "statistics.csv", false);
    }
