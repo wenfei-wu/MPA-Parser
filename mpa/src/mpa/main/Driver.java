@@ -18,16 +18,17 @@ public class Driver {
          System.exit(1);
       }
       // TODO Auto-generated method stub
-      Mpa mpa = new Mpa(args[0], args[1], 5);
+      Mpa mpa = new Mpa(args[0], args[1], 5, "statistics.csv");
       System.out.println("====================================================");
       System.out.println("MPA start parsing");
       System.out.println("====================================================");
+      mpa.WriteStatistics(null);
       mpa.Start();
       mpa.WriteFailures("failures.csv");
       mpa.WriteWarnings("warnings.csv");
       System.out.println("====================================================");
       System.out.println("MPA write statistics");
       System.out.println("====================================================");
-      mpa.WriteStatistics("statistics.csv");
+      //mpa.WriteStatistics("statistics.csv");
    }
 }

@@ -39,6 +39,7 @@ public class Mpa {
 	int numThread;
 	String root;
 	Map<String, Statistics> stats;
+	String statfile;
 	String failures;
 	String warnings;
 	int count;
@@ -49,11 +50,15 @@ public class Mpa {
 	int numFiles;
 
    long startTime;
-	public Mpa(String flist, String source_root, int nThread){
+	public Mpa(String flist, String source_root, int nThread, String sfile){
 	   fileList = flist;
 		numThread = nThread;
 		root = source_root;
 		stats = new HashMap<String, Statistics>();
+		statfile = sfile;
+		if(statfile != null){
+		   FileIO.WriteToFile("", statfile, false);
+		}
 		failures = "";
 		warnings = "";
 		count = 0;
@@ -151,6 +156,13 @@ public class Mpa {
         // localCount+=countInRound;
          outputLock.lock();
          if(last || localCount >= PER_THREAD_FILES_PER_REPORT){
+            if(statfile!=null){
+               String out="";
+               for(Map.Entry<String, Statistics> entry: stats.entrySet()){
+                  out+=entry.getKey()+","+entry.getValue()+"\n";
+               }
+               FileIO.WriteToFile(out, statfile, true);
+            }
             stats.putAll(localOutput);
             count+=localCount;
             failures += localFailure;
@@ -297,6 +309,9 @@ public class Mpa {
       System.out.println(Util.Join(", ", Configs.L2Protocols));
       System.out.println("OSPF, BGP");
       System.out.println("References");
+      if(filename == null){
+         return ;
+      }
       String out="";
       for(Map.Entry<String, Statistics> entry: stats.entrySet()){
          out+=entry.getKey()+","+entry.getValue()+"\n";
