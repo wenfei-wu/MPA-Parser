@@ -31,10 +31,69 @@ public class Preprocessor {
       else if(vendor.equals("Juniper-Flat")){
          return FlatJuniperProcess(file);
       }
+      else if(vendor.equals("F5")){
+         return F5Process(file);
+      }
       else{
          
       }
       return null;
+   }
+   private String F5Process(String file) throws IOException {
+      String POOL = "pool";
+      String VIRTUAL ="virtual";
+      String PROFILE = "profile";
+      String LTM = "ltm";
+      String MONITOR = "monitor";
+      String currentStanza = null;
+      
+      String out = "";
+      BufferedReader br = new BufferedReader(new FileReader(file));  
+      String line = null;  
+      while ((line = br.readLine()) != null)  
+      {
+         if(line.startsWith(POOL)){
+            currentStanza = POOL;
+            out+= line+"\n";
+         }
+         else if(line.startsWith(VIRTUAL)){
+            currentStanza = VIRTUAL;
+            out+= line+"\n";            
+         }
+         else if(line.startsWith(PROFILE)){
+            currentStanza = PROFILE;
+            out+= line+"\n";            
+         }
+         else if(line.startsWith(LTM)){
+            currentStanza = LTM;
+            out+= line+"\n";
+         }
+         else if(line.startsWith(MONITOR)){
+            currentStanza = MONITOR;
+            out+= line+"\n";            
+         }
+         else if(line.startsWith("}")){
+            if(currentStanza != null){
+               out+= line+"\n";
+            }
+            currentStanza = null;
+         }
+         else if(!line.startsWith(" ")){
+            
+         }
+         else{
+            if(currentStanza == null){
+               
+            }
+            else if(currentStanza.equals(VIRTUAL)){
+               out+= line+"\n";               
+            }
+            else if(currentStanza.equals(POOL)){
+               out+= line+"\n";               
+            }
+         }
+      }
+      return out;
    }
    private String FlatJuniperProcess(String file) throws IOException  {
       String SET = "set";

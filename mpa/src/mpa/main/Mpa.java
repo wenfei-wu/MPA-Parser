@@ -19,7 +19,8 @@ import mpa.grammar.arista.control.AristaCombinedParser;
 import mpa.grammar.arista.control.AristaExtractor;
 import mpa.grammar.cisco.control.CiscoCombinedParser;
 import mpa.grammar.cisco.control.CiscoExtractor;
-import mpa.grammar.flatjuniper.FlatJuniperParser;
+import mpa.grammar.f5.control.F5CombinedParser;
+import mpa.grammar.f5.control.F5Extractor;
 import mpa.grammar.flatjuniper.control.FlatJuniperCombinedParser;
 import mpa.grammar.flatjuniper.control.FlatJuniperExtractor;
 import mpa.grammar.quanta.control.QuantaCombinedParser;
@@ -39,6 +40,7 @@ public class Mpa {
 	String root;
 	Map<String, Statistics> stats;
 	String failures;
+	String warnings;
 	int count;
 	
 	Lock inputLock, outputLock;
@@ -53,6 +55,7 @@ public class Mpa {
 		root = source_root;
 		stats = new HashMap<String, Statistics>();
 		failures = "";
+		warnings = "";
 		count = 0;
 		inputLock = new ReentrantLock();
 		outputLock = new ReentrantLock();
@@ -86,7 +89,6 @@ public class Mpa {
          try {
             t[i].join();
          } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
          }
       }
@@ -107,7 +109,7 @@ public class Mpa {
          e.printStackTrace();
       }
       numFiles = files.size();
-  //    System.out.println("Input: read "+files.size()+" files.");
+      System.out.println(files.size()+" files to process.");
    }
 
    
@@ -119,12 +121,14 @@ public class Mpa {
       int countInRound;
       int localCount;
       String localFailure;
+      String localWarning;
       public MpaThread(int i){
          index= i;
          localFiles = new LinkedList<String>();
          localOutput = new HashMap<String, Statistics>();
          localCount = 0;
          localFailure = "";
+         localWarning = "";
     //     System.out.println("MpaThread "+i+" created");
       }
 
@@ -150,6 +154,7 @@ public class Mpa {
             stats.putAll(localOutput);
             count+=localCount;
             failures += localFailure;
+            warnings += localWarning;
             long endTime = System.nanoTime();    
             long elapsed = (endTime - startTime)/1000000000; // in second
             System.out.println(count+" file processed in "+elapsed+" seconds, reported from thread "+index);
@@ -160,6 +165,7 @@ public class Mpa {
             localOutput.clear();
             localCount = 0;
             localFailure = "";
+            localWarning = "";
          }
          outputLock.unlock();
          countInRound = 0;
@@ -170,7 +176,7 @@ public class Mpa {
             String line = localFiles.remove();
             localCount++;
             //System.out.println(localCount);            
-            
+
             String[] fields = line.split(",");
             if(fields.length!=7){
                localFailure += line+"\n";
@@ -184,6 +190,9 @@ public class Mpa {
             Statistics stat  = parseVendorConfigurations(vendor, file);            
             if(stat!=null){
                localOutput.put(line, stat);
+               if(stat.HasWarning()){
+                  localWarning+= line+"\n";
+               }
             }
             else{
                System.out.println("FAILURE: "+line);
@@ -192,57 +201,6 @@ public class Mpa {
          }
       }
 
-      private Statistics parseVendorConfigurations(String vendor, String file) {
-         String content;
-         Preprocessor prep = new Preprocessor();
-         try {
-            content = prep.Process(vendor, file);
-         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-         }
-         Statistics stat =null;
-         try{
-            if(vendor.equals("Cisco")){
-               MpaCombinedParser<?,?> parser = new CiscoCombinedParser(content);
-               ParserRuleContext tree = parser.parse();
-               CiscoExtractor extractor = new CiscoExtractor();
-               ParseTreeWalker walker = new ParseTreeWalker();
-               walker.walk(extractor, tree);
-               stat = extractor.getVendorConfiguration();
-            }
-            else if(vendor.equals("Arista")){
-               MpaCombinedParser<?,?> parser = new AristaCombinedParser(content);
-               ParserRuleContext tree = parser.parse();
-               AristaExtractor extractor = new AristaExtractor();
-               ParseTreeWalker walker = new ParseTreeWalker();
-               walker.walk(extractor, tree);
-               stat = extractor.getVendorConfiguration();
-            }
-            else if(vendor.equals("Quanta")){
-               MpaCombinedParser<?,?> parser = new QuantaCombinedParser(content);
-               ParserRuleContext tree = parser.parse();
-               QuantaExtractor extractor = new QuantaExtractor();
-               ParseTreeWalker walker = new ParseTreeWalker();
-               walker.walk(extractor, tree);
-               stat = extractor.getVendorConfiguration();
-            }
-            else if(vendor.equals("Juniper") || vendor.equals("Juniper-Flat")){
-                MpaCombinedParser<?,?> parser = new FlatJuniperCombinedParser(content);
-                ParserRuleContext tree = parser.parse();
-                FlatJuniperExtractor extractor = new FlatJuniperExtractor();
-                ParseTreeWalker walker = new ParseTreeWalker();
-                walker.walk(extractor, tree);
-                stat = extractor.getVendorConfiguration();
-            }
-            else{
-            //   System.out.println("unknown vendor: "+ vendor);
-            }     
-         }catch(Exception e){
-         //   System.out.println("Parse Error: "+file);
-         }
-         return stat;
-      }
 
       private boolean input() {
          inputLock.lock();
@@ -262,8 +220,74 @@ public class Mpa {
    }
 
 
+   public static Statistics parseVendorConfigurations(String vendor, String file) {
+      String content;
+      Preprocessor prep = new Preprocessor();
+      try {
+         content = prep.Process(vendor, file);
+      } catch (Exception e) {
+         e.printStackTrace();
+         return null;
+      }
+      Statistics stat =null;
+      try{
+         if(vendor.equals("Cisco")){
+            MpaCombinedParser<?,?> parser = new CiscoCombinedParser(content);
+            ParserRuleContext tree = parser.parse();
+            CiscoExtractor extractor = new CiscoExtractor();
+            ParseTreeWalker walker = new ParseTreeWalker();
+            walker.walk(extractor, tree);
+            stat = extractor.getVendorConfiguration();
+         }
+         else if(vendor.equals("Arista")){
+            MpaCombinedParser<?,?> parser = new AristaCombinedParser(content);
+            ParserRuleContext tree = parser.parse();
+            AristaExtractor extractor = new AristaExtractor();
+            ParseTreeWalker walker = new ParseTreeWalker();
+            walker.walk(extractor, tree);
+            stat = extractor.getVendorConfiguration();
+         }
+         else if(vendor.equals("Quanta")){
+            MpaCombinedParser<?,?> parser = new QuantaCombinedParser(content);
+            ParserRuleContext tree = parser.parse();
+            QuantaExtractor extractor = new QuantaExtractor();
+            ParseTreeWalker walker = new ParseTreeWalker();
+            walker.walk(extractor, tree);
+            stat = extractor.getVendorConfiguration();
+         }
+         else if(vendor.equals("Juniper") || vendor.equals("Juniper-Flat")){
+             MpaCombinedParser<?,?> parser = new FlatJuniperCombinedParser(content);
+             ParserRuleContext tree = parser.parse();
+             FlatJuniperExtractor extractor = new FlatJuniperExtractor();
+             ParseTreeWalker walker = new ParseTreeWalker();
+             walker.walk(extractor, tree);
+             stat = extractor.getVendorConfiguration();
+         }
+         else if(vendor.equals("F5") ){
+            MpaCombinedParser<?,?> parser = new F5CombinedParser(content);
+            ParserRuleContext tree = parser.parse();
+            F5Extractor extractor = new F5Extractor();
+            ParseTreeWalker walker = new ParseTreeWalker();
+            walker.walk(extractor, tree);
+            stat = extractor.getVendorConfiguration();
+        }
+         
+         else{
+         //   System.out.println("unknown vendor: "+ vendor);
+         }     
+      }catch(Exception e){
+         e.printStackTrace();
+      //   System.out.println("Parse Error: "+file);
+      }
+      return stat;
+   }
+   
    public void WriteFailures(String filename) {
       FileIO.WriteToFile(failures, filename, false);
+   }
+   
+   public void WriteWarnings(String filename){
+      FileIO.WriteToFile(warnings, filename, false);
    }
    
    public void WriteStatistics(String filename){

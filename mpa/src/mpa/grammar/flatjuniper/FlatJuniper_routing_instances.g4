@@ -139,6 +139,11 @@ rit_description
    s_description
 ;
 
+rit_forwarding_options
+:
+   s_forwarding_options
+;
+
 rit_instance_type
 :
    INSTANCE_TYPE VRF
@@ -160,6 +165,7 @@ rit_named_routing_instance
 rit_named_routing_instance_tail
 :
    rit_common
+   | rit_forwarding_options
    | rit_instance_type
    | rit_interface
    | rit_null
@@ -178,9 +184,10 @@ rit_null
       | CHASSIS
       | CLASS_OF_SERVICE
       | EVENT_OPTIONS
-      | FORWARDING_OPTIONS
+//      | FORWARDING_OPTIONS
       | SERVICES
       | SNMP
+      | KEY
    ) s_null_filler
 ;
 

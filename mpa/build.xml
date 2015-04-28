@@ -96,6 +96,7 @@
          <fileset dir="src" includes="mpa/grammar/quanta/Quanta*.java"/>
          <fileset dir="src" includes="mpa/grammar/flatjuniper/FlatJuniper*.java"/>
          <fileset dir="src" includes="mpa/grammar/juniper/Juniper*.java"/>
+         <fileset dir="src" includes="mpa/grammar/f5/F5*.java"/>
       </delete>
    </target>
 
@@ -143,6 +144,7 @@
          <antlr4lexer grammar.name="QuantaLexer" grammar.packagedir="mpa/grammar/quanta"/>
          <antlr4lexer grammar.name="JuniperLexer" grammar.packagedir="mpa/grammar/juniper"/>
          <antlr4lexer grammar.name="FlatJuniperLexer" grammar.packagedir="mpa/grammar/flatjuniper"/>
+         <antlr4lexer grammar.name="F5Lexer" grammar.packagedir="mpa/grammar/f5"/>
        <!--  <antlr4lexer grammar.name="FlatJuniperLexer" grammar.packagedir="mpa/grammar/flatjuniper"/> -->
       </parallel>
    </target>
@@ -208,6 +210,19 @@
                <fileset dir="src/mpa/grammar/flatjuniper" includes="FlatJuniper_policy_options.g4"/>
                <fileset dir="src/mpa/grammar/flatjuniper" includes="FlatJuniper_protocols.g4"/>
                <fileset dir="src/mpa/grammar/flatjuniper" includes="FlatJuniper_routing_instances.g4"/>
+            </dependencies>
+         </antlr4parser>
+         <antlr4parser grammar.name="F5Parser" grammar.packagedir="mpa/grammar/f5">
+            <dependencies>
+               <fileset dir="src/mpa/grammar/f5" includes="F5Parser.g4"/>
+               <fileset dir="src/mpa/grammar/f5" includes="F5Lexer.g4"/>
+               <fileset dir="src/mpa/grammar/f5" includes="F5Lexer.tokens"/>
+               <fileset dir="src/mpa/grammar/f5" includes="F5Parser.tokens"/>
+               <fileset dir="src/mpa/grammar/f5" includes="F5Parser_ltm.g4"/>
+               <fileset dir="src/mpa/grammar/f5" includes="F5Parser_monitor.g4"/>
+               <fileset dir="src/mpa/grammar/f5" includes="F5Parser_pool.g4"/>
+               <fileset dir="src/mpa/grammar/f5" includes="F5Parser_profile.g4"/>
+               <fileset dir="src/mpa/grammar/f5" includes="F5Parser_virtual.g4"/>
             </dependencies>
          </antlr4parser>
 

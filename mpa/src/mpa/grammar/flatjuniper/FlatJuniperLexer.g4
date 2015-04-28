@@ -390,6 +390,11 @@ DHCP
    'dhcp'
 ;
 
+DHCP_RELAY
+:
+   'dhcp-relay'
+;
+
 DIRECT
 :
    'direct'
@@ -893,6 +898,11 @@ ISIS
 ISO
 :
    'iso'
+;
+
+KEY
+:
+   'key'
 ;
 
 KERBEROS_SEC

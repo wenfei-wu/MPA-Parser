@@ -45,13 +45,24 @@ s_forwarding_options
    FORWARDING_OPTIONS
    ( 
       ( HELPERS BOOTP INTERFACE fo_helper_bootp_interface_tail )
+      | ( DHCP_RELAY GROUP fo_dhcp_relay_group_tail )
       |  s_null_filler
    )
 ;
 
+iface_vlan
+:
+   VARIABLE (PERIOD DEC)
+;
+
 fo_helper_bootp_interface_tail
 :
-   name = VARIABLE s_null_filler
+   name = iface_vlan s_null_filler
+;
+
+fo_dhcp_relay_group_tail
+:
+   groupname = variable INTERFACE name = iface_vlan
 ;
 
 s_groups

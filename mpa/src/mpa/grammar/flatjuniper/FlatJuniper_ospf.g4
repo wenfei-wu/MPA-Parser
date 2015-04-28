@@ -79,7 +79,7 @@ at_interface
    INTERFACE
    (
       id = interface_id
-      | WILDCARD
+      | wild = WILDCARD
    ) at_interface_tail
 ;
 
@@ -173,7 +173,7 @@ ot_area
    AREA
    (
       area = IP_ADDRESS
-      | WILDCARD
+      | wild = WILDCARD
    ) ot_area_tail
 ;
 

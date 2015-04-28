@@ -1,13 +1,12 @@
 package mpa.main;
 
+import mpa.representation.Configs;
+
 public class Driver {
 
-   public static void main(String[] args) {  
-      boolean debug = false;
-      String root = "root";
-      String filelist = "juniper_examples.csv";
-      if(debug){
-         Debug d = new Debug(root, filelist);
+   public static void main(String[] args) {
+      if(Configs.debug){
+         Debug d = new Debug(Configs.root, Configs.filelist);
          d.Run();
          return ;
       }
@@ -25,6 +24,7 @@ public class Driver {
       System.out.println("====================================================");
       mpa.Start();
       mpa.WriteFailures("failures.csv");
+      mpa.WriteWarnings("warnings.csv");
       System.out.println("====================================================");
       System.out.println("MPA write statistics");
       System.out.println("====================================================");

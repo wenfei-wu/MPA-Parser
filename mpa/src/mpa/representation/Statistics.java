@@ -9,13 +9,21 @@ public class Statistics {
    Vlans vlans;
    References references;
    
-   
+   boolean hasWarning;
   
    public Statistics(){
       l2protocols = new L2Protocols();
       l3protocols = new L3Protocols();
       vlans = new Vlans();
       references = new References();
+      hasWarning = false;
+   }
+   
+   public void SetWarning(){
+      hasWarning = true;
+   }
+   public boolean HasWarning(){
+      return hasWarning;
    }
    
    // References

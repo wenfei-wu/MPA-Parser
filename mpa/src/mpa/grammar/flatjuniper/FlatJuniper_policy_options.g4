@@ -294,7 +294,7 @@ tht_accept
 
 tht_as_path_expand
 :
-   AS_PATH_EXPAND LAST_AS COUNT DEC
+   AS_PATH_EXPAND ( LAST_AS COUNT )? DEC
 ;
 
 tht_as_path_prepend

@@ -25,7 +25,7 @@ import mpa.util.Util;
 
 public class Debug {
    String root;
-   String filelist = "flatjuniper_examples.csv";
+   String filelist;
    String file;
    String content;
    
@@ -72,7 +72,7 @@ public class Debug {
       FileIO.WriteToFile(content, "debug_content.cfg", false);
       // parse
       //content = "set interfaces xe-0/1/0 unit 617 vlan-id 617\n";
-      Statistics stat = parseVendorConfigurations(vendor, content);
+      Statistics stat = Mpa.parseVendorConfigurations(vendor, file);
 
       System.out.println("vlanDeclared, vlanInst");
       System.out.println(Util.Join(", ", Configs.L2Protocols));
@@ -83,48 +83,4 @@ public class Debug {
    }
    
 
-   private Statistics parseVendorConfigurations(String vendor, String content) {
-      Statistics stat =null;
-      try{
-         if(vendor.equals("Cisco")){
-            MpaCombinedParser<?,?> parser = new CiscoCombinedParser(content);
-            ParserRuleContext tree = parser.parse();
-            CiscoExtractor extractor = new CiscoExtractor();
-            ParseTreeWalker walker = new ParseTreeWalker();
-            walker.walk(extractor, tree);
-            stat = extractor.getVendorConfiguration();
-         }
-         else if(vendor.equals("Arista")){
-            MpaCombinedParser<?,?> parser = new AristaCombinedParser(content);
-            ParserRuleContext tree = parser.parse();
-            AristaExtractor extractor = new AristaExtractor();
-            ParseTreeWalker walker = new ParseTreeWalker();
-            walker.walk(extractor, tree);
-            stat = extractor.getVendorConfiguration();
-         }
-         else if(vendor.equals("Quanta")){
-            MpaCombinedParser<?,?> parser = new QuantaCombinedParser(content);
-            ParserRuleContext tree = parser.parse();
-            QuantaExtractor extractor = new QuantaExtractor();
-            ParseTreeWalker walker = new ParseTreeWalker();
-            walker.walk(extractor, tree);
-            stat = extractor.getVendorConfiguration();
-         }
-         else if(vendor.equals("Juniper") || vendor.equals("Juniper-Flat")){
-             MpaCombinedParser<?,?> parser = new FlatJuniperCombinedParser(content);
-             ParserRuleContext tree = parser.parse();
-             FlatJuniperExtractor extractor = new FlatJuniperExtractor();
-             ParseTreeWalker walker = new ParseTreeWalker();
-             walker.walk(extractor, tree);
-             stat = extractor.getVendorConfiguration();
-         }
-         else{
-         //   System.out.println("unknown vendor: "+ vendor);
-         }     
-      }catch(Exception e){
-         e.printStackTrace();
-         System.out.println("Parse Error: "+file);
-      }
-      return stat;
-   }
 }

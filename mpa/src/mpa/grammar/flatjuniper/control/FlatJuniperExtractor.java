@@ -62,8 +62,10 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
                }
                if(bgp_type.containsKey(key)){
                   String type = bgp_type.get(key);
-                  if(peer_as!=null){
-                     local_as = peer_as;
+                  if(type.equals("internal")){
+                     if(peer_as!=null){
+                        local_as = peer_as;
+                     }
                   }
                }
             }
@@ -83,19 +85,7 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
                currentIface = ctx.name.getText();        
                //System.out.println(ctx.getText());
                stat.AddRefEntity(Identifiers.IFACE_T, ctx.name.getText());
-               currentStanza.push(new String[]{Identifiers.IFACE_T, ctx.name.getText()});
-               
-               String iface_name = ctx.name.getText();
-               if(!ifaces.contains(iface_name)){
-                  ifaces.add(ctx.name.getText());    
-                  // check LACP
-                  for(String wildcard: default_wildcard_with_lacp){
-                     if(Util.JuniperMatch(iface_name, wildcard)){
-                        stat.L2ProtoInst("LACP", null);
-                        break;
-                     }
-                  }
-               }
+               currentStanza.push(new String[]{Identifiers.IFACE_T, ctx.name.getText()});                           
             }
             else{
                currentStanza.push(new String[]{Identifiers.IFACE_T, "default"});
@@ -111,6 +101,20 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
          currentIface = null;
          if(!inGroup){        
                currentStanza.pop(); 
+               if(ctx.name!= null){           
+                  // check LACP: (1) not disabled, (2) not checked
+                  String iface_name = ctx.name.getText();
+                  if(!iface_name.equals(currentDisabledIface) && !ifaces.contains(iface_name)) {
+                     ifaces.add(ctx.name.getText()); 
+                     // check LACP wildcard
+                     for(String wildcard: default_wildcard_with_lacp){
+                        if(Util.JuniperMatch(iface_name, wildcard)){
+                           stat.L2ProtoInst("LACP", null);
+                           break;
+                        }
+                     }  
+                  }
+               }
          }
          else{
             if(ctx.wild!=null){
@@ -118,7 +122,11 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
             }
          }
       }
-	   
+      String currentDisabledIface = null;
+      @Override public void enterIt_disable(@NotNull FlatJuniperParser.It_disableContext ctx) {
+         currentDisabledIface = currentIface;
+      }
+      
 	   
 	   // Intra-Ref
 	      // Entity
@@ -209,9 +217,6 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
 	         // for bgp
 	         bgp_stack.push("global");
 	      }
-	      else{
-	         System.out.println("Juniper Warning: bpg configuration in group, not processed.");
-	      }
 	   }
 	   @Override public void exitS_protocols_bgp(@NotNull FlatJuniperParser.S_protocols_bgpContext ctx) {
 	      if(!inGroup) {
@@ -264,18 +269,25 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
 	   
 	      // OSPF
 	   String currentArea = null;
+	   String currentAreaWildCard = null;
 	   @Override public void enterOt_area(@NotNull FlatJuniperParser.Ot_areaContext ctx) {
 	      if(!inGroup){
             stat.AddRefEntity(Identifiers.BGP_T, ctx.area.getText());	   
-            currentStanza.push(new String[]{Identifiers.BGP_T, ctx.area.getText()});  
+            currentStanza.push(new String[]{Identifiers.BGP_T, ctx.area.getText()}); 
             currentArea = ctx.area.getText();
+	      } 
+	      else{
+	         currentAreaWildCard = ctx.wild.getText();
 	      }
 	   }
 	   @Override public void exitOt_area(@NotNull FlatJuniperParser.Ot_areaContext ctx) {
 	      if(!inGroup) {
             currentStanza.pop(); 
             currentArea = null;
-         }	      
+         }	
+         else{
+            currentAreaWildCard = null;
+         }      
 	   }
 	         // routing-instance
 	   @Override public void enterS_routing_instances(@NotNull FlatJuniperParser.S_routing_instancesContext ctx) {
@@ -530,6 +542,7 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
          }
          else{
             System.out.println("Juniper Warning: find vlan used in group");
+            stat.SetWarning();
          }
       }
       @Override public void enterBrt_vlan_id_list(@NotNull FlatJuniperParser.Brt_vlan_id_listContext ctx) { 
@@ -539,6 +552,7 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
          }
          else{
             System.out.println("Juniper Warning: find vlan used in group");
+            stat.SetWarning();
          }
       }      
 	   
@@ -575,15 +589,25 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
          // 802.1Q
       //@Override public void enterIt_vlan_id(@NotNull FlatJuniperParser.It_vlan_idContext ctx) {}
       //@Override public void enterBrt_vlan_id_list(@NotNull FlatJuniperParser.Brt_vlan_id_listContext ctx) { }
+      
          // DHCP-relay
       Set<String> DHCP_relay_iface = new HashSet<String>();
       @Override public void enterFo_helper_bootp_interface_tail(@NotNull FlatJuniperParser.Fo_helper_bootp_interface_tailContext ctx) { 
          String iface = ctx.name.getText();
+         //System.out.println("dhcp-relay: iface: "+iface);
          if(! DHCP_relay_iface.contains(iface)){
             DHCP_relay_iface.add(iface);
             stat.L2ProtoInst("DHCP", null);
          }
       }
+      @Override public void enterFo_dhcp_relay_group_tail(@NotNull FlatJuniperParser.Fo_dhcp_relay_group_tailContext ctx) {
+         String iface = ctx.name.getText();
+         if(! DHCP_relay_iface.contains(iface)){
+            DHCP_relay_iface.add(iface);
+            stat.L2ProtoInst("DHCP", null);
+         }         
+      }
+      
          // HSRP: VRRP
       @Override public void enterIvrrpt_virtual_address(@NotNull FlatJuniperParser.Ivrrpt_virtual_addressContext ctx) {
          stat.L2ProtoInst("VRRP", null);
@@ -599,6 +623,7 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
          }
          else{
             System.out.println("Juniper Warning: interface address configured in group, not processed");
+            stat.SetWarning();
          }
       }
             // area iface:  ot_area, at_interface
@@ -614,7 +639,10 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
             }
          }
          else{
-            System.out.println("Juniper Warning: OSPF interface in Group, not processed");
+            if(!currentAreaWildCard.equals("<*>") ||  !ctx.wild.getText().equals("<*>")){
+               System.out.println("Juniper Warning: OSPF interface in Group, not processed");
+               stat.SetWarning();
+            }
          }
       }
       
@@ -631,6 +659,10 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
          bgp_stack.push(ctx.ip.getText());
          String neighbor = ctx.ip.getText();
          bgp_neighbors.put(neighbor, (Stack<String>)bgp_stack.clone());
+         if(inGroup){
+            System.out.println("Juniper Warning: bpg neighbor in group, not processed.");
+            stat.SetWarning();
+         }
       }
       @Override public void exitBt_neighbor(@NotNull FlatJuniperParser.Bt_neighborContext ctx) {
          bgp_stack.pop();
@@ -638,6 +670,10 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
       @Override public void enterBt_local_as(@NotNull FlatJuniperParser.Bt_local_asContext ctx) {
          String key = bgp_stack.toString();
          bgp_local_as.put(key, ctx.as.getText());
+         if(inGroup){
+            System.out.println("Juniper Warning: bpg neighbor in group, not processed.");
+            stat.SetWarning();
+         }
       }
       @Override public void enterBt_peer_as(@NotNull FlatJuniperParser.Bt_peer_asContext ctx) {
          String key = bgp_stack.toString();
@@ -646,6 +682,10 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
       @Override public void enterBt_type(@NotNull FlatJuniperParser.Bt_typeContext ctx) { 
          String key = bgp_stack.toString();
          bgp_type.put(key, ctx.t.getText());
+         if(inGroup){
+            System.out.println("Juniper Warning: bpg neighbor in group, not processed.");
+            stat.SetWarning();
+         }
       }
       
       
