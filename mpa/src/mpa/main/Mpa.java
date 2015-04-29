@@ -21,6 +21,8 @@ import mpa.grammar.arista.control.AristaCombinedParser;
 import mpa.grammar.arista.control.AristaExtractor;
 import mpa.grammar.cisco.control.CiscoCombinedParser;
 import mpa.grammar.cisco.control.CiscoExtractor;
+import mpa.grammar.citrix.control.CitrixCombinedParser;
+import mpa.grammar.citrix.control.CitrixExtractor;
 import mpa.grammar.f5.control.F5CombinedParser;
 import mpa.grammar.f5.control.F5Extractor;
 import mpa.grammar.flatjuniper.control.FlatJuniperCombinedParser;
@@ -301,8 +303,15 @@ public class Mpa {
             ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(extractor, tree);
             stat = extractor.getVendorConfiguration();
-        }
-         
+         }
+         else if(vendor.equals("Citrix")){
+            MpaCombinedParser<?,?> parser = new CitrixCombinedParser(content);
+            ParserRuleContext tree = parser.parse();
+            CitrixExtractor extractor = new CitrixExtractor();
+            ParseTreeWalker walker = new ParseTreeWalker();
+            walker.walk(extractor, tree);
+            stat = extractor.getVendorConfiguration();            
+         }
          else{
          //   System.out.println("unknown vendor: "+ vendor);
          }     

@@ -34,10 +34,35 @@ public class Preprocessor {
       else if(vendor.equals("F5")){
          return F5Process(file);
       }
+      else if(vendor.equals("Citrix")){
+         return CitrixProcess(file);
+      }
       else{
          
       }
       return null;
+   }
+   private String CitrixProcess(String file) throws IOException {
+      String patterns[] = new String[]{"add service .*", 
+            "add (lb|cs) vserver .*", "bind (lb|cs|ssl) vserver",
+            "(add|bind) serviceGroup .*", "(add|bind) lb monitor .*", 
+            "(add|bind) ssl cipher .*", "add .* policy .*",
+            "(add|bind) vlan .*", "set interface .*"
+            };
+      String out = "";
+      BufferedReader br = new BufferedReader(new FileReader(file));  
+      String line = null;  
+      while ((line = br.readLine()) != null)  
+      {
+         for(int i = 0; i<patterns.length; i++){
+            if(line.matches(patterns[i])){
+               line = line.replaceAll("\\\\\\\"", "'");
+               out+= line+"\n";
+               break;
+            }
+         }
+      }
+      return out;
    }
    private String F5Process(String file) throws IOException {
       String POOL = "pool";

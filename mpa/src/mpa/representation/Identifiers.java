@@ -30,6 +30,13 @@ public class Identifiers {
    public final static String PROFILE_T = "profile";
    public final static String LTM_T = "ltm";
    public final static String MONITOR_T = "monitor";
+      // Citrix
+   public final static String SERVICE_T = "";
+   public final static String VSERVER_T = "";
+   public final static String SERVICEGROUP_T = "";
+   //public final static String MONITOR_T = "";
+   public final static String CIPHER_T = "";
+   //public final static Stirng POLICY_T = "";
    
    // address format
    //public final String IP_F = "ip";
