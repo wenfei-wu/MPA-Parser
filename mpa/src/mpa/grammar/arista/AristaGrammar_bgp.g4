@@ -6,21 +6,23 @@ options {
 
 router_bgp_stanza
 :
-    ROUTER ANYTHING asnumber = NAME NEWLINE
-	//{System.out.println("AS NUMBER " + _localctx.asnumber.getText()); }
-	(anything_else | neighbor)*
+    ROUTER ANYTHING asnumber = NAME NEWLINE	
+	(neighbor_route_map | neighbor | anything_else)*
 ;
 
 anything_else
 :
 	(ANYTHING ~NEWLINE* NEWLINE)
+        | (NEIGHBOR NAME ANYTHING ~NEWLINE* NEWLINE)
 ;
 
 neighbor
 :
-	(NEIGHBOR ipaddress = NAME REMOTE_AS asnumber = NAME NEWLINE)
-	//{System.out.println("neighbor IP address " + _localctx.ipaddress.getText()); }
-	//{System.out.println("neighbor AS NUMBER " + _localctx.asnumber.getText()); }
-	| (NEIGHBOR NAME ANYTHING ~NEWLINE* NEWLINE)
-		
+	(NEIGHBOR ipaddress = NAME REMOTE_AS asnumber = NAME NEWLINE)		        		
 ;
+
+neighbor_route_map
+:
+        (NEIGHBOR NAME ROUTE_MAP routeMap = NAME ~NEWLINE* NEWLINE)
+;
+ 

@@ -45,5 +45,10 @@ public class AristaExtractor extends AristaGrammarBaseListener
                 .getText().contains(":") ? "128" : "32",
                 ctx.asnumber.getText());
     }
+    
+    @Override public void enterNeighbor_route_map(@NotNull AristaGrammar.Neighbor_route_mapContext ctx) {
+        stat.AddIntraRef(Identifiers.BGP_T, localASNumber, Identifiers.ROUTEMAP_T,
+                ctx.routeMap.getText());
+    }
 
 }

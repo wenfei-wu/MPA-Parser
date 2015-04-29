@@ -216,33 +216,36 @@ public class Preprocessor {
       return out;
    }
 
-   public String AristaProcess(String file) throws IOException {
-      boolean inStanza = false;
+   public String AristaProcess(String file) throws IOException{
+      boolean inStanza=false;
       String INTERFACE = "interface";
       String ACCESS_LIST = "access-list";
+      String SPANNING_TREE = "spanning-tree";
+      String ROUTER_BGP = "router bgp";
       String out = "";
       BufferedReader br = new BufferedReader(new FileReader(file));
       String line = null;
-      while ((line = br.readLine()) != null) {
-         if (!line.startsWith(" ")) {
-            if (line.startsWith(INTERFACE) || line.startsWith(ACCESS_LIST)) {
+      while ((line = br.readLine()) != null)
+      {
+       	 if(!line.startsWith(" ")){
+            if(line.startsWith(INTERFACE) || line.startsWith(ACCESS_LIST) || line.startsWith(ROUTER_BGP)){
                inStanza = true;
-            } else {
+            }
+            else{
                inStanza = false;
             }
          }
-         if (inStanza) {
-            out += line + "\n";
-         } else {
-            if (!line.startsWith(" ")) {
-               if (line.contains(ACCESS_LIST)) {
-                  out += line + "\n";
+         if (inStanza){
+            out+=line+"\n";
+         }
+         else{
+            if(!line.startsWith(" ")){
+               if(line.contains(ACCESS_LIST) || line.contains(SPANNING_TREE)){
+                  out+=line+"\n";
                }
             }
          }
-      }
-      br.close();
-      // System.out.println(out);
+      }      
       return out;
    }
 

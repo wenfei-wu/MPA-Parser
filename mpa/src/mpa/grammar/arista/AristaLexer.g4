@@ -37,6 +37,11 @@ REMOTE_AS
 	'remote-as'
 ;
 
+ROUTE_MAP
+:
+    'route-map'
+;
+
 ANYTHING
 :
 	'description'
