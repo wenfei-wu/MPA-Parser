@@ -10,6 +10,7 @@ public class References {
    List<String[]> entities;
    // reference: from_type, from_name, to_type, to_name;
    List<String[]> intra_ref;
+   
    public References(){
       entities = new ArrayList<String[]>();
       intra_ref = new ArrayList<String[]>();

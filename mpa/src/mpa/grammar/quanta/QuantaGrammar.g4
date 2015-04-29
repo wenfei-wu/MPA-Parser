@@ -1,7 +1,7 @@
 parser grammar QuantaGrammar;
 
 import
-QuantaGrammar_interface, QuantaGrammar_acl;
+QuantaGrammar_interface, QuantaGrammar_acl, QuantaGrammar_vlan, QuantaGrammar_mst;
 
 options {
    superClass = 'mpa.grammar.MpaParser';
@@ -20,5 +20,7 @@ quanta_configuration
    (
       acl_stanza
       | if_stanza
+      | vlan_declared
+      | mst_instance
    )* NEWLINE* EOF
 ;
