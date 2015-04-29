@@ -27,6 +27,16 @@ ANYTHING
 	| [\:] | [-] | [_] | [,] | ["] | ['/'] | [\.]
 ;
 
+VLAN_NAME
+:
+        'vlan name'
+;
+
+SPANNING_TREE_MST_VLAN
+:
+        'spanning-tree mst vlan'
+;
+
 UDLD
 :
 	'udld'

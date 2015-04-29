@@ -1,22 +1,9 @@
 package mpa.main;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-
-import mpa.grammar.MpaCombinedParser;
-import mpa.grammar.arista.control.AristaCombinedParser;
-import mpa.grammar.arista.control.AristaExtractor;
-import mpa.grammar.cisco.control.CiscoCombinedParser;
-import mpa.grammar.cisco.control.CiscoExtractor;
-import mpa.grammar.flatjuniper.control.FlatJuniperCombinedParser;
-import mpa.grammar.flatjuniper.control.FlatJuniperExtractor;
-import mpa.grammar.quanta.control.QuantaCombinedParser;
-import mpa.grammar.quanta.control.QuantaExtractor;
 import mpa.representation.Configs;
 import mpa.representation.Statistics;
 import mpa.util.FileIO;
@@ -39,7 +26,8 @@ public class Debug {
       BufferedReader br = null;
       try {
          br = new BufferedReader(new FileReader(filelist));
-      } catch (FileNotFoundException e) {
+         br.close();
+      } catch (IOException e) {
          e.printStackTrace();
          return ;
       }
@@ -81,6 +69,5 @@ public class Debug {
       
       System.out.println(stat);
    }
-   
-
 }
+

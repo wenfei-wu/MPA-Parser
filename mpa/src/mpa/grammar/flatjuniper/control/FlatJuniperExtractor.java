@@ -655,6 +655,7 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
       Map<String, Stack<String>> bgp_neighbors = new HashMap< String, Stack<String> >();
       //@Override public void enterS_protocols_bgp(@NotNull FlatJuniperParser.S_protocols_bgpContext ctx) { }
       //@Override public void enterBt_group(@NotNull FlatJuniperParser.Bt_groupContext ctx) { }
+      @SuppressWarnings("unchecked")
       @Override public void enterBt_neighbor(@NotNull FlatJuniperParser.Bt_neighborContext ctx) {
          bgp_stack.push(ctx.ip.getText());
          String neighbor = ctx.ip.getText();
