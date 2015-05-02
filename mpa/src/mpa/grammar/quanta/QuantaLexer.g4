@@ -11,11 +11,11 @@ superClass = 'mpa.grammar.MpaLexer';
 ANYTHING
 :
 	'description'
-	|'load-interval'
-	|'shutdown'
-	|'ip address'
-	|'addport'
-	|'service-policy'
+	| 'load-interval'
+	| 'shutdown'
+	| 'ip address'
+	| 'addport'
+	| 'service-policy'
 	| 'set'
 	| 'spanning-tree'
 	| 'vlan'
@@ -23,8 +23,10 @@ ANYTHING
 	| 'no'
 	| 'classofservice'
 	| 'snmp-server'
-	| 'sflow'		
-	| [\:] | [-] | [_] | [,] | ["] | ['/'] | [\.]
+	| 'sflow'
+        | 'port-channel'
+        | 'speed'
+	| [\:] | [-] | [_] | [,] | ["] | ['/'] | [\.] | [\&] | [#] | ['?']
 ;
 
 VLAN_NAME
