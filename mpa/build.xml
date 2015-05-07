@@ -98,6 +98,7 @@
          <fileset dir="src" includes="mpa/grammar/juniper/Juniper*.java"/>
          <fileset dir="src" includes="mpa/grammar/f5/F5*.java"/>
          <fileset dir="src" includes="mpa/grammar/citrix/Citrix*.java"/>
+         <fileset dir="src" includes="mpa/grammar/juniperfirewall/JuniperFirewall*.java"/>
       </delete>
    </target>
 
@@ -147,7 +148,7 @@
          <antlr4lexer grammar.name="FlatJuniperLexer" grammar.packagedir="mpa/grammar/flatjuniper"/>
          <antlr4lexer grammar.name="F5Lexer" grammar.packagedir="mpa/grammar/f5"/>
          <antlr4lexer grammar.name="CitrixLexer" grammar.packagedir="mpa/grammar/citrix"/>
-       <!--  <antlr4lexer grammar.name="FlatJuniperLexer" grammar.packagedir="mpa/grammar/flatjuniper"/> -->
+		 <antlr4lexer grammar.name="JuniperFirewallLexer" grammar.packagedir="mpa/grammar/juniperfirewall"/>
       </parallel>
    </target>
 
@@ -235,7 +236,14 @@
                <fileset dir="src/mpa/grammar/citrix" includes="CitrixParser.tokens"/>
             </dependencies>
          </antlr4parser>
-
+         <antlr4parser grammar.name="JuniperFirewallGrammar" grammar.packagedir="mpa/grammar/juniperfirewall">
+            <dependencies>
+               <fileset dir="src/mpa/grammar/juniperfirewall" includes="JuniperFirewallLexer.g4"/>
+               <fileset dir="src/mpa/grammar/juniperfirewall" includes="JuniperFirewallLexer.tokens"/>
+               <fileset dir="src/mpa/grammar/juniperfirewall" includes="JuniperFirewallGrammar.g4"/>
+               <fileset dir="src/mpa/grammar/juniperfirewall" includes="JuniperFirewallGrammar.tokens"/>
+            </dependencies>
+         </antlr4parser>
       </parallel>
    </target>
 
