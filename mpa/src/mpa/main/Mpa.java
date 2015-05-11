@@ -193,7 +193,7 @@ public class Mpa {
                 if (failfile != null) {
                     FileIO.WriteToFile(localFailure, failfile, true);
                 }
-                stats.putAll(localStat);
+                //stats.putAll(localStat);
                 count += localCount;
                 failures += localFailure;
                 warnings += localWarning;
