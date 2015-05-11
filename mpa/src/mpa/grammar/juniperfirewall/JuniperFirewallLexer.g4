@@ -113,6 +113,16 @@ CODE
     'code'
 ;
 
+NSRP
+:
+    'nsrp'
+;
+
+MONITOR
+:
+    'monitor'
+;
+
 NEWLINE
 :
    [\n]

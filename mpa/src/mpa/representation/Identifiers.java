@@ -47,4 +47,14 @@ public class Identifiers {
    public final static String BGP_GLOBAL = "bgp-global";
    public final static String BGP_GROUP = "bgp-group";
    public final static String BGP_NEIGHBOR = "bgp-neighbor";
+   
+   // juniper firewall references
+   public final static String ZONE = "zone";
+   public final static String INTERFACE = "interface";
+   public final static String VROUTER = "vrouter";
+   public final static String ADDRESS = "address";
+   public final static String GROUP_ADDRESS = "group-address";
+   public final static String SERVICE = "service";
+   public final static String POLICY = "policy";
+   
 }

@@ -20,6 +20,7 @@ juniperfirewall_configuration
       | address
       | group_address
       | policy
+      | nsrp
    )* NEWLINE* EOF
 ;
 
@@ -128,4 +129,9 @@ policyService
 policyAnythingElse
 :
     SET (~NEWLINE)* NEWLINE
+;
+
+nsrp
+:
+    SET NSRP MONITOR INTERFACE interfaceName = NAME NEWLINE
 ;

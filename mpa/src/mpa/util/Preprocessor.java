@@ -295,6 +295,7 @@ public class Preprocessor {
         String ADDRESS = "set address";
         String GROUP_ADDRESS = "set group address";
         String POLICY = "set policy";
+        String NSRP = "set nsrp monitor interface";
         String out = "";
         BufferedReader br = new BufferedReader(new FileReader(file));
         String line = null;
@@ -313,7 +314,7 @@ public class Preprocessor {
                     if (line.startsWith(SERVICE) || line.startsWith(ZONE)
                             || line.startsWith(VROUTER) || line.startsWith(
                                     INTERFACE) || line.startsWith(ADDRESS)
-                            || line.startsWith(GROUP_ADDRESS)) {
+                            || line.startsWith(GROUP_ADDRESS) || line.startsWith(NSRP)) {
                         if (!((line.contains("set group address") && line
                                 .contains("add")))) {
                             out += line + "\n";
