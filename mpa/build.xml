@@ -8,7 +8,7 @@
    </taskdef>
 
    <!-- import and configure one-jar -->
-   <property name="one-jar.dir" location="one-jar"/>
+   <property name="one-jar.dir" location="lib/one-jar"/>
    <import file="${one-jar.dir}/build.onejar.xml"/>
 	<property name="temp.dir" value="temp" />	
    <path id="libraries">

@@ -221,7 +221,7 @@ public class Mpa {
                 //System.out.println(localCount);            
 
                 String[] fields = line.split(",");
-                if (fields.length != 7) {
+                if (fields.length != 6) {
                     localFailure += line + "\n";
                     continue;
                 }
