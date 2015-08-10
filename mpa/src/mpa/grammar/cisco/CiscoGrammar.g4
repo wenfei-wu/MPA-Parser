@@ -62,6 +62,7 @@ null_stanza
    (
       HARDWARE
       | LOGGING
+      | SET
    ) ~NEWLINE* NEWLINE
 ;
 

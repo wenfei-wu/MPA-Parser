@@ -249,10 +249,12 @@ neighbor_null_tail
    (
       ACTIVATE
       | ALLOWAS_IN
+      | AS_OVERRIDE
       | DEFAULT_ORIGINATE
       | DESCRIPTION
       | DONT_CAPABILITY_NEGOTIATE
       | EBGP_MULTIHOP
+      | LOCAL_AS
       | MAXIMUM_PEERS
       | MAXIMUM_PREFIX
       | NEXT_HOP_SELF
@@ -339,11 +341,13 @@ null_bgp_substanza
       | BESTPATH
       | BGP
       | DEFAULT_INFORMATION
+      | EVENT_HISTORY
       | LOG_NEIGHBOR_CHANGES
       | MAXIMUM_PATHS
+      | NEXT_HOP_SELF
+      | ROUTER_ID
       | SHUTDOWN
       | SYNCHRONIZATION
-      | ( TEMPLATE PEER_SESSION )
    ) ~NEWLINE* NEWLINE
 ;
 
@@ -365,6 +369,7 @@ router_bgp_stanza
       | null_bgp_substanza
       | redistribute_substanza
       | template_peer_substanza
+      | template_peer_session_substanza
       | vrf_nexus_substanza
    )*
 ;
@@ -378,6 +383,18 @@ template_peer_substanza
       | template_null_substanza
       | template_remote_as_substanza
    )*
+;
+
+template_peer_session_substanza
+:
+   TEMPLATE PEER_SESSION name = VARIABLE NEWLINE
+   (
+      template_address_family_substanza
+      | template_inherit_substanza
+      | template_null_substanza
+      | template_remote_as_substanza
+   )*
+   EXIT_PEER_SESSION NEWLINE
 ;
 
 template_address_family_header

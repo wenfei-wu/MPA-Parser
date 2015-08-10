@@ -189,6 +189,24 @@ null_block_if_substanza
    ) ~NEWLINE* NEWLINE
 ;
 
+null_glbp_stanza
+:
+   GLBP group = DEC NEWLINE
+   null_glbp_substanza+
+;
+
+null_glbp_substanza
+:
+   (
+      IP
+      | PRIORITY
+      | PREEMPT
+      | LOAD_BALANCING
+      | WEIGHTING
+      | FORWARDER
+   ) ~NEWLINE* NEWLINE
+;
+
 null_if_stanza
 :
    hsrp_stanza
@@ -197,6 +215,7 @@ null_if_stanza
       NO? SWITCHPORT NEWLINE
    )
    | null_block_if_stanza
+   | null_glbp_stanza
    | null_standalone_if_stanza
 ;
 
@@ -234,6 +253,15 @@ null_standalone_if_stanza
       | GROUP_RANGE
       | HALF_DUPLEX
       | HOLD_QUEUE
+      | 
+      (
+         IGNORE
+         (
+            CTS
+            | DCD
+            | DSR
+         )
+      )
       |
       (
          IP  
@@ -253,6 +281,7 @@ null_standalone_if_stanza
             | IGMP
             | IRDP
             | LOAD_SHARING
+            | MFIB
             | MROUTE_CACHE
             | MTU
             | MULTICAST

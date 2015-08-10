@@ -270,6 +270,11 @@ ARP
 
 ;
 
+AS_OVERRIDE
+:
+   'as-override'
+;
+
 AS_PATH
 :
    'as-path'
@@ -845,6 +850,11 @@ DCBX
    'dcbx'
 ;
 
+DCD
+:
+   'dcd'
+;
+
 DEAD_INTERVAL
 :
    'dead-interval'
@@ -1110,6 +1120,11 @@ DSPFARM
    'dspfarm'
 ;
 
+DSR
+:
+   'dsr'
+;
+
 DSS
 :
    'dss'
@@ -1265,6 +1280,11 @@ EVENT_HANDLER
    'event-handler'
 ;
 
+EVENT_HISTORY
+:
+   'event-history'
+;
+
 EXCEED_ACTION
 :
    'exceed-action'
@@ -1298,6 +1318,11 @@ EXIT
 EXIT_ADDRESS_FAMILY
 :
    'exit-address-family'
+;
+
+EXIT_PEER_SESSION
+:
+   'exit-peer-session'
 ;
 
 EXPECT
@@ -1472,6 +1497,11 @@ FORWARD_PROTOCOL
 FORWARDING
 :
    'forwarding'
+;
+
+FORWARDER
+:
+   'forwarder'
 ;
 
 FQDN
@@ -1737,6 +1767,11 @@ IDLE_TIMEOUT
 IGMP
 :
    'igmp'
+;
+
+IGNORE
+:
+   'ignore'
 ;
 
 IGP
@@ -2049,6 +2084,11 @@ LISTEN
 LLDP
 :
    'lldp'
+;
+
+LOAD_BALANCING
+:
+   'load-balancing'
 ;
 
 LOAD_INTERVAL
@@ -4393,6 +4433,11 @@ WEBVPN
 WEIGHT
 :
    'weight'
+;
+
+WEIGHTING
+:
+   'weighting'
 ;
 
 WHOIS
