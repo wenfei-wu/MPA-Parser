@@ -11,17 +11,17 @@ import mpa.util.Util;
 
 public class Vlans {
 
-    Set<String> vlan_declared;
+    Set<Integer> vlan_declared;
     // format :  iface, vlans
     List<String[]> iface_vlans;
 
     public Vlans() {
-        vlan_declared = new HashSet<String>();
+        vlan_declared = new HashSet<Integer>();
         iface_vlans = new ArrayList<String[]>();
     }
 
     public void DeclareVlan(String vlan) {
-        vlan_declared.add(vlan);
+        vlan_declared.add(Integer.parseInt(vlan));
     }
 
     public void IfaceVlan(String iface, String vlan) {
@@ -40,6 +40,7 @@ public class Vlans {
             List<Integer> vlan_int = Util.range2Array(vlan);
             if (!iface_vlan_map.containsKey(iface)) {
                 Set<Integer> vlans = new HashSet<Integer>();
+                vlan_int.retainAll(vlan_declared);
                 vlans.addAll(vlan_int);
                 iface_vlan_map.put(iface, vlans);
             } else {
@@ -49,8 +50,17 @@ public class Vlans {
         for (String iface : iface_vlan_map.keySet()) {
             Set<Integer> vlans = iface_vlan_map.get(iface);
             inst_count += vlans.size();
+        } 
+        
+        String vlanList = "";
+        for (int vlan : vlan_declared) {
+        	vlanList += vlan + "-";
         }
-        out += vlan_declared.size() + "," + inst_count;
+        if (vlanList.length() > 0) {
+        	vlanList = vlanList.substring(0, vlanList.length()-1);
+        }
+        
+        out += vlanList + "," + inst_count + "," + vlan_declared.size();
         return out;
     }
 }

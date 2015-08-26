@@ -17,11 +17,15 @@ public class L3Protocols {
     // <interface, ospf_proc, area>
     List<String[]> iface_proc_area;
     // OSPF
+    // Process <pid>
+    List<String[]> ospf_process;
     // <opsf_proc, subnet, mask, area>
     List<String[]> ospf_subnet_mask_area;
     // juniper is different,   <area, iface>
     List<String[]> area_iface = new ArrayList<String[]>();
     // BGP 
+    // Process <local-as>
+    List<String[]> bgp_process;
     // Neighbor <local-as, addr, mask, remote-as>
     List<String[]> neighbor_as;
     // template <name, local-as, remote-as>
@@ -37,7 +41,9 @@ public class L3Protocols {
     public L3Protocols() {
         iface_ip = new ArrayList<String[]>();
         iface_proc_area = new ArrayList<String[]>();
+        ospf_process = new ArrayList<String[]>();
         ospf_subnet_mask_area = new ArrayList<String[]>();
+        bgp_process = new ArrayList<String[]>();
         neighbor_as = new ArrayList<String[]>();
         template_as = new ArrayList<String[]>();
         group_as = new ArrayList<String[]>();
@@ -62,6 +68,10 @@ public class L3Protocols {
     public void IfaceOspfArea(String iface, String proc, String area) {
         iface_proc_area.add(new String[]{iface, proc, area});
     }   
+    
+    public void OspfProcess(String pid) {
+    	ospf_process.add(new String[]{pid});
+    }
 
     public void OspfNetworkArea(String proc, String addr, String mask,
             String area) {
@@ -123,7 +133,15 @@ public class L3Protocols {
         // finally juniper
         count += area_iface.size();
         return count;
-    }   
+    } 
+    
+    public int OspfProcesses() {
+    	return ospf_process.size();
+    }
+    
+    public void BgpProcess(String local_as) {
+    	bgp_process.add(new String[]{local_as});
+    }
 
     public void BgpNeighborAs(String local_as, String addr, String mask,
             String remote_as) {
@@ -183,9 +201,13 @@ public class L3Protocols {
         }
         return count;
     }
+    
+    public int BgpProcesses() {
+    	return bgp_process.size();
+    }
 
     @Override
     public String toString() {
-        return OspfInst() + "," + BgpInst();
+        return OspfInst() + "," + OspfProcesses() + "," + BgpInst() + "," + BgpProcesses();
     }
 }

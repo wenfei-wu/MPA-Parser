@@ -71,6 +71,10 @@ public class Statistics {
     public void IfaceOspfArea(String iface, String proc, String area) {
         l3protocols.IfaceOspfArea(iface, proc, area);
     }
+    
+    public void OspfProcess(String pid) {
+        l3protocols.OspfProcess(pid);
+    }
 
     public void OspfNetworkArea(String proc, String addr, String mask,
             String area) {
@@ -86,6 +90,10 @@ public class Statistics {
     }
 
     // BGP
+    
+    public void BgpProcess(String local_as) {
+        l3protocols.BgpProcess(local_as);
+    }
 
     public void BgpNeighborAs(String local_as, String addr, String mask,
             String remote_as) {

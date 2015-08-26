@@ -36,6 +36,7 @@ public class AristaExtractor extends AristaGrammarBaseListener
 
     @Override public void enterRouter_bgp_stanza(
             @NotNull AristaGrammar.Router_bgp_stanzaContext ctx) {
+    	stat.BgpProcess(ctx.asnumber.getText());
         localASNumber = ctx.asnumber.getText();
     }
 
@@ -49,6 +50,11 @@ public class AristaExtractor extends AristaGrammarBaseListener
     @Override public void enterNeighbor_route_map(@NotNull AristaGrammar.Neighbor_route_mapContext ctx) {
         stat.AddIntraRef(Identifiers.BGP_T, localASNumber, Identifiers.ROUTEMAP_T,
                 ctx.routeMap.getText());
+    }
+    
+    @Override public void enterRouter_ospf_stanza(
+            @NotNull AristaGrammar.Router_ospf_stanzaContext ctx) {
+    	stat.OspfProcess(ctx.procnum.getText());
     }
 
 }

@@ -229,6 +229,7 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
 	   @Override public void enterBt_group(@NotNull FlatJuniperParser.Bt_groupContext ctx) {
          if(!inGroup){
             stat.AddRefEntity(Identifiers.BGP_T, ctx.name.getText());
+            stat.BgpProcess(ctx.name.getText());
             currentStanza.push(new String[]{Identifiers.BGP_T, ctx.name.getText()});
             
             // for bgp
@@ -271,12 +272,15 @@ public class FlatJuniperExtractor extends FlatJuniperParserBaseListener
 	   String currentArea = null;
 	   String currentAreaWildCard = null;
 	   @Override public void enterOt_area(@NotNull FlatJuniperParser.Ot_areaContext ctx) {
+		   
 	      if(!inGroup){
-            stat.AddRefEntity(Identifiers.BGP_T, ctx.area.getText());	   
+            stat.AddRefEntity(Identifiers.BGP_T, ctx.area.getText());
+            stat.OspfProcess(ctx.area.getText());
             currentStanza.push(new String[]{Identifiers.BGP_T, ctx.area.getText()}); 
             currentArea = ctx.area.getText();
 	      } 
 	      else{
+	    	 stat.OspfProcess(ctx.wild.getText());
 	         currentAreaWildCard = ctx.wild.getText();
 	      }
 	   }

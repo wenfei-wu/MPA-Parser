@@ -174,7 +174,9 @@
                <fileset dir="src/mpa/grammar/arista" includes="AristaLexer.g4"/>
                <fileset dir="src/mpa/grammar/arista" includes="AristaGrammar.g4"/>
                <fileset dir="src/mpa/grammar/arista" includes="AristaGrammar_acl.g4"/>
+               <fileset dir="src/mpa/grammar/arista" includes="AristaGrammar_bgp.g4"/>
                <fileset dir="src/mpa/grammar/arista" includes="AristaGrammar_interface.g4"/>
+               <fileset dir="src/mpa/grammar/arista" includes="AristaGrammar_ospf.g4"/>
                <fileset dir="src/mpa/grammar/arista" includes="AristaLexer.tokens"/>
                <fileset dir="src/mpa/grammar/arista" includes="AristaGrammar.tokens"/>
             </dependencies>

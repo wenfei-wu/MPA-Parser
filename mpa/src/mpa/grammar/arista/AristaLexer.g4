@@ -4,13 +4,32 @@ lexer grammar AristaLexer;
 package mpa.grammar.arista;
 }
 
+@members {
+boolean enableDEC = true;
+}
+
 options {
 superClass = 'mpa.grammar.MpaLexer';
 }
 
-SPANNING_TREE
+ACCESS_LIST
 :
-	'spanning-tree'
+   'access-list'
+;
+
+BGP
+:
+    'bgp'
+;
+
+INTERFACE
+:
+   'interface'
+;
+
+IP
+:
+   'ip'
 ;
 
 MODE
@@ -23,24 +42,37 @@ MSTP
 	'mstp'
 ;
 
-ROUTER:
-	'router'
-;
 
 NEIGHBOR
 :
-	'neighbor'
+    'neighbor'
+;
+
+OSPF
+:
+    'ospf'
 ;
 
 REMOTE_AS
 :
-	'remote-as'
+    'remote-as'
 ;
 
 ROUTE_MAP
 :
     'route-map'
 ;
+
+ROUTER:
+	'router'
+;
+
+
+SPANNING_TREE
+:
+    'spanning-tree'
+;
+
 
 ANYTHING
 :
@@ -56,7 +88,6 @@ ANYTHING
 	| 'ip address'
 	| 'channel-group'
 	| 'vrf'
-	| 'bgp'
 	| 'maximum-paths'
 	| 'aggregate-address'
 	| 'redistribute'
@@ -74,19 +105,12 @@ ANYTHING
         | ['+'] | ['=']
 ;
 
-INTERFACE
+DEC
 :
-   'interface'
-;
+   F_Digit
+   {enableDEC}?
 
-IP
-:
-   'ip'
-;
-
-ACCESS_LIST
-:
-   'access-list'
+   F_Digit*
 ;
 
 NEWLINE
@@ -102,3 +126,8 @@ NAME
 WS:
    [ \t]+ -> skip;
 
+fragment
+F_Digit
+:
+   '0' .. '9'
+;

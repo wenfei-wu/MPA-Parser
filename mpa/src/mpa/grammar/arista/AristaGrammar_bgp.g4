@@ -6,14 +6,15 @@ options {
 
 router_bgp_stanza
 :
-    ROUTER ANYTHING asnumber = NAME NEWLINE	
+    ROUTER BGP asnumber = DEC NEWLINE	
 	(neighbor_route_map | neighbor | anything_else)*
 ;
 
 anything_else
 :
 	(ANYTHING ~NEWLINE* NEWLINE)
-        | (NEIGHBOR NAME ANYTHING ~NEWLINE* NEWLINE)
+	    | (BGP ~NEWLINE* NEWLINE)
+        | (NEIGHBOR ~NEWLINE* NEWLINE)
 ;
 
 neighbor

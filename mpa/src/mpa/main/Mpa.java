@@ -64,8 +64,11 @@ public class Mpa {
         root = source_root;
         stats = new HashMap<String, Statistics>();
         statfile = sfile;
-        if (statfile != null) {
-            FileIO.WriteToFile("", statfile, false);
+        if (statfile != null) {        	
+            FileIO.WriteToFile("Stamp,Device,ConfigFile,Vendor,Role,Model,"
+            		+"Vlans,VlanIfaces,NumVlans,UDLD,LACP,DOT1Q,DHCP,HSRP,MST,"
+            		+"LLDP,VRRP,NSRP,OspfInst,OspfProcesses,BgpInst,BgpProcesses,"
+            		+"IntraRefComplex\n", statfile, false);
         }
         failfile = ffile;
         if (failfile != null) {
@@ -178,8 +181,8 @@ public class Mpa {
                     for (Map.Entry<String, Statistics> entry : localStat
                             .entrySet()) {
                         try {
-                            out
-                                    += entry.getKey() + "," + entry.getValue() + "\n";
+                            out += entry.getKey() + "," 
+                            		+ entry.getValue().toString() + "\n";
                         } catch (Exception e) {
                             localFailure += entry.getKey() + "\n";
                             toRemove.add(entry.getKey());
@@ -365,7 +368,7 @@ public class Mpa {
         List<String> toRemove = new ArrayList<String>();
         for (Map.Entry<String, Statistics> entry : stats.entrySet()) {
             try {
-                out += entry.getKey() + "," + entry.getValue() + "\n";
+                out += entry.getKey() + "," + entry.getValue().toString() + "\n";
             } catch (Exception e) {
                 failures += entry.getKey() + "\n";
                 toRemove.add(entry.getKey());

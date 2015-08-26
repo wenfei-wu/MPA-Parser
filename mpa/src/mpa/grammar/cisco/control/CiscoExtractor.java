@@ -39,6 +39,7 @@ public class CiscoExtractor extends CiscoGrammarBaseListener
    String currentBgp = null;
    @Override public void enterRouter_bgp_stanza(@NotNull CiscoGrammar.Router_bgp_stanzaContext ctx) { 
       stat.AddRefEntity(Identifiers.BGP_T, ctx.asNum.getText());
+      stat.BgpProcess(ctx.asNum.getText());
       currentBgp = ctx.asNum.getText();
    }
    @Override public void exitRouter_bgp_stanza(@NotNull CiscoGrammar.Router_bgp_stanzaContext ctx) {
@@ -47,6 +48,7 @@ public class CiscoExtractor extends CiscoGrammarBaseListener
    String currentOspf = null;
    @Override public void enterRouter_ospf_stanza(@NotNull CiscoGrammar.Router_ospf_stanzaContext ctx) { 
       stat.AddRefEntity(Identifiers.OSPF_T, ctx.procnum.getText());
+      stat.OspfProcess(ctx.procnum.getText());
       currentOspf = ctx.procnum.getText();
    }
    @Override public void exitRouter_ospf_stanza(@NotNull CiscoGrammar.Router_ospf_stanzaContext ctx) {
